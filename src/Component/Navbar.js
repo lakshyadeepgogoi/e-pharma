@@ -22,7 +22,8 @@ import { FiShoppingBag } from "react-icons/fi";
 
 export const Navbar = () => {
 
-  const [category, setCategory] = useState("")
+  const [category, setCategory] = useState("");
+  console.log(category);
 
 
   return (
