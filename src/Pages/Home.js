@@ -82,8 +82,8 @@ function Home() {
             {/* special Offer */}
             <div className='flex flex-col mt-14 mb-6 sm:h-96'>
                 <div className='text-center w-full h-8 font-bold text-3xl'>Special offers</div>
-                <div className='flex flex-row gap-2 my-6'>
-                    <img src={offer1} alt='offer1Img' className='hidden sm:block'/>
+                <div className='flex sm:flex-row gap-2 my-6'>
+                    <img src={offer1} alt='offer1Img' className='hidden md:block'/>
                     <img src={offer2} alt='offer2Img'/>
                 </div>
             </div>
@@ -100,7 +100,7 @@ function Home() {
             </div>
 
             {/* last banner */}
-            <div className='w-full mt-16 sm:h-96'>
+            <div className='w-full mt-16 xl:h-96'>
                 <img src={lastBanner} alt='lastBanner' className='object-cover mt-6  rounded-3xl '/>
             </div>
 

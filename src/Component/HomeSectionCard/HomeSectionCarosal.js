@@ -8,10 +8,10 @@ function HomeSectionCarosal() {
 
     
 const responsive = {
-    0: { items: 1,
-    },
-    568: { items: 3 },
-    1024: { items: 4 },
+    0: { items: 1,},
+    608: { items: 2 },
+    1024: { items: 3 },
+    1524:{items: 4},
 };
 
 const items =[1,1,1,1,1,1,1,1,1,].map((item)=><HomeSectionCard/>)

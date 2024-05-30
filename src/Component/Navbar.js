@@ -30,7 +30,7 @@ export const Navbar = () => {
     <div className='w-full m-auto  md:static'>
 
     {/* fist section */}
-    <div className=' w-full m-auto border-b-2 border-gray-400 hidden md:block'>
+    <div className=' w-full m-auto border-b-2 border-gray-400 hidden sm:block'>
       <div className='w-4/5 h-12 flex justify-between m-auto '>
         {/* address or location */}
         <div className='flex flex-row items-center gap-2'>
@@ -46,7 +46,7 @@ export const Navbar = () => {
       
 
 {/* second section section */}
-      <div className='w-full md:flex flex-row justify-between h-24 items-center hidden '>
+      <div className='w-full sm:flex flex-row justify-between h-24 items-center hidden '>
         {/* logo */}
         <div className='flex flex-row items-center gap-2 w-52 ml-8  h-full'> 
           <img src={Logo} alt='logo'/>
@@ -55,7 +55,7 @@ export const Navbar = () => {
 
         {/* search bar */}
         <div className=' m-auto h-full items-center  flex flex-row gap-4'>
-          <div className='w-[600px] flex flex-row h-12 mt-2 ' >
+          <div className='sm:w-96 md:w-[600px] flex flex-row h-12 mt-2 ' >
           <input type='text' placeholder='What are you looking for?' className='w-full py-2 px-4 rounded-l-full border border-r-0 border-gray-300 focus:outline-none flex-grow font-inter bg-transparent'/>
               <button className='bg-[#F2971F]  text-white py-2 px-4  rounded-r-full border border-l-0 border-gray-300 hover:bg-blue-600 transition duration-300 font-inter '>
               <FaSearch />
@@ -83,7 +83,7 @@ export const Navbar = () => {
 
 
             {/* mobile view first section */}
-        <div className='w-full md:hidden relative h-60 bg-gradient-to-r from-blue-700 to-blue-600 mb-16 rounded-b-[50px]'>
+        <div className='w-full sm:hidden relative h-60 bg-gradient-to-r from-blue-700 to-blue-600 mb-16 rounded-b-[50px]'>
           <div className='w-11/12 flex flex-row justify-between m-auto pt-8 items-center text-white'>
             <h1 className='text-2xl font-bold '>Pulse & Pills</h1>
             <div className='flex flex-row gap-4 text-xl mr-4'>
@@ -110,14 +110,14 @@ export const Navbar = () => {
 
 {/* category section */}
       <div className=' w-full h-max md:h-36'>
-        <div className='w-11/12 h-full md:bg-[#E7EFFF] m-auto rounded-xl'>
-          <ul className='grid grid-cols-3  justify-between items-center h-full md:grid-cols-6 gap-2'>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit rounded-2xl text-center pt-4 sm:p-2'><Link to='/Medicine'><img src={Medicine} alt='medicine ' className='w-20 h-20 m-auto '/><span>Medicine</span></Link></li>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit  rounded-2xl text-center pt-4 sm:p-2'><Link to='/Health'><img src={Health_care} alt='Health_care '  className='w-20 h-20 m-auto'/><span>Health care</span></Link></li>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Lab'><img src={Lab} alt='Lab'  className='w-20 h-20 m-auto'/><span>Lab test</span></Link></li>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Surgical'><img  src={ayurvadic} alt='ayurvadic'  className='w-20 h-20 m-auto'/><span>Surgical Items</span></Link></li>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Ayurvedic'><img src={equipment} alt='equipment'  className='w-20 h-20 m-auto'/><span>Ayurvedic Medicine</span></Link></li>
-            <li onClick={()=>{setCategory("")}} className=' mt-4 bg-[#E7EFFF] md::bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Equipment'><img src={surgical} alt='surgical'  className='w-20 h-20 m-auto'/><span>Equipment on Rent</span></Link></li>
+        <div className='w-[87%] h-full md:bg-[#E7EFFF] m-auto rounded-xl'>
+          <ul className='grid grid-cols-3  justify-between items-center h-full sm:grid-cols-6 gap-2'>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF]  md:bg-inherit rounded-2xl text-center pt-4 sm:p-2'><Link to='/Medicine'><img src={Medicine} alt='medicine ' className='w-20 h-20 m-auto '/><span>Medicine</span></Link></li>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF] md:bg-inherit  rounded-2xl text-center pt-4 sm:p-2'><Link to='/Health'><img src={Health_care} alt='Health_care '  className='w-20 h-20 m-auto'/><span>Health care</span></Link></li>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Lab'><img src={Lab} alt='Lab'  className='w-20 h-20 m-auto'/><span>Lab test</span></Link></li>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Surgical'><img  src={ayurvadic} alt='ayurvadic'  className='w-20 h-20 m-auto'/><span>Surgical Items</span></Link></li>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Ayurvedic'><img src={equipment} alt='equipment'  className='w-20 h-20 m-auto'/><span>Ayurvedic Medicine</span></Link></li>
+            <li onClick={()=>{setCategory("")}} className=' mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2'><Link to='/Equipment'><img src={surgical} alt='surgical'  className='w-20 h-20 m-auto'/><span>Equipment on Rent</span></Link></li>
           </ul>
         </div>
       </div>
