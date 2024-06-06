@@ -6,6 +6,7 @@ import OffersCards from '../Component/HomeSectionCard/OffersCards';
 import offer1 from "../Component/Assets/Medicine/offer1.png"
 import offer2 from "../Component/Assets/Medicine/Offer2.png"
 import lastBanner from '../Component/Assets/Medicine/lastBanner.png'
+import MoretoLove from '../Component/Category/MoreToLove/MoretoLove';
 
 function Home() {
   return (
@@ -105,6 +106,10 @@ function Home() {
             </div>
 
             {/* more to Love */}
+            <div className='flex flex-col gap-6 items-center justify-center'>
+                <p className='text-3xl font-semibold'>More to Love</p>
+                <div><MoretoLove/></div>
+            </div>
             
 
 

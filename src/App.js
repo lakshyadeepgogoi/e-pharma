@@ -9,6 +9,9 @@ import Lab from './Component/Category/Lab';
 import Surgical from './Component/Category/Surgical';
 import Ayurvedic from './Component/Category/Ayurvedic';
 import Equipment from './Component/Category/Equipment';
+import ProductDetails from './Component/ProdutctDetails/ProductDetails';
+import Cart from './Pages/Cart';
+import Error from './Pages/Error';
 
 
 
@@ -29,6 +32,10 @@ function App() {
           <Route path='/Surgical' element={<Surgical/>}/>
           <Route path='/Ayurvedic' element={<Ayurvedic/>}/>
           <Route path='/Equipment' element={<Equipment/>}/>
+
+          <Route path='/Product-details' element={<ProductDetails/>}/>
+          <Route path='/cart' element={<Cart/>}/>
+          <Route path='*' element={<Error/>}/>
         </Routes>
 
       </BrowserRouter>
