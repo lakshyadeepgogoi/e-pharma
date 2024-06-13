@@ -61,19 +61,19 @@ function ProductDetails() {
               Package Size
             </p>
             <div className="flex flex-row gap-4 mt-6">
-              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
+              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-2 md:p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
                 <p className="text-[#090F47] text-xl font-semibold">Rs. 100</p>
                 <span> 10 Pellets</span>
               </div>
-              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
+              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-2 md:p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
                 <p className="text-[#090F47] text-xl font-semibold">Rs. 100</p>
                 <span> 10 Pellets</span>
               </div>
-              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
+              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-2 md:p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
                 <p className="text-[#090F47] text-xl font-semibold">Rs. 100</p>
                 <span> 10 Pellets</span>
               </div>
-              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
+              <div className="bg-[#F5F5F5] w-28 h-24 rounded-lg flex flex-col gap-2 p-2 md:p-4 hover:border-2 hover:border-[#FFA41B] hover:bg-[#FFA41B] hover:bg-opacity-35">
                 <p className="text-[#090F47] text-xl font-semibold">Rs. 100</p>
                 <span> 10 Pellets</span>
               </div>
@@ -81,26 +81,26 @@ function ProductDetails() {
           </div>
 
           {/* buy buttons */}
-          <div className="md:mt-12 mt-24  flex flex-col md:flex-row items-center gap-4 md:gap-8">
+          <div className="mt-12 flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <NavLink to="/cart">
-              <button className="w-52 h-14 rounded-lg bg-[#7D8CFF] text-xl hover:bg-[#4B5DE7] font-semibold">
+              <button className="w-96 md:w-52 h-14 rounded-lg bg-[#7D8CFF] text-xl hover:bg-[#4B5DE7] font-semibold">
                 Add to bag <ShoppingCartOutlinedIcon />
               </button>
             </NavLink>
-            <div className="font-semibold text-kg">OR</div>
+
+            <div className="font-semibold text-lg">OR</div>
 
             <NavLink to="/cart" >
-              <button className="w-52 h-14 rounded-lg bg-[#eeb469] text-xl hover:bg-[#F2971F] font-semibold">
+              <button className="w-96 md:w-52 h-14 rounded-lg bg-[#eeb469] text-xl hover:bg-[#F2971F] font-semibold">
                 Buy Now <ElectricBoltOutlinedIcon />
               </button>
             </NavLink>
-
           </div>
         </div>
       </div>
 
       {/* description */}
-      <div className="mt-8">
+      <div className="mt-8 p-2">
         <div className="">
           <ul className="hidden md:flex flex-row gap-12 items-center justify-center leading-8 text-xl border-t-2 border-b-2 border-gray-200 my-6">
             <li>PRODUCT DETAIL</li>
@@ -109,7 +109,7 @@ function ProductDetails() {
             <li>PRODUCT SUBSTITUTES</li>
             <li>CUSTOMERS ALSO BOUGHT</li>
           </ul>
-          <div>
+          <div className="p-4">
             <h1>PRODUCT DETAIL</h1>
             <p className="text-[#090F47]  opacity-55">
               Interdum et malesuada fames ac ante ipsum primis in faucibus.
@@ -126,7 +126,7 @@ function ProductDetails() {
       </div>
 
       {/* more to love */}
-      <div className="flex flex-col gap-4 my-10">
+      <div className="flex flex-col gap-4 my-10 p-4">
       <p className="text-3xl font-semibold">Product Substitutes</p>
       <div className="flex flex-wrap">
         <ProductShort/>
