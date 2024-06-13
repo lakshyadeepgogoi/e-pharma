@@ -17,8 +17,8 @@ function Surgical() {
 
 
   return (
-    <div className='md:px-0 mx-auto md:w-[87%] flex flex-col  h-max my-10 '>
-    <div className='flex flex-row justify-between'>
+    <div className='md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max my-10 '>
+    <div className='flex flex-row justify-between items-center'>
       <p>category/-----</p>
       <div>
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -40,7 +40,7 @@ function Surgical() {
     </FormControl>
       </div>
     </div>     
-     <div className='flex flex-wrap gap-3 px-3 '>
+     <div className='flex flex-wrap gap-2 md:gap-3 '>
       <HomeSectionCard/>
       <HomeSectionCard/>
       <HomeSectionCard/>

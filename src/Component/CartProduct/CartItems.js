@@ -24,9 +24,9 @@ function CartItems() {
   }
 
   return (
-    <div className="flex flex-row w-full h-44 border-2 border-[#d0cece] ">
+    <div className="flex flex-row w-full h-52 md:h-44 border-2 border-[#d0cece] ">
       {/* left side photo */}
-      <div className="w-44 h-full ">
+      <div className="md:w-48 w-44 h-full ">
         <img
           src={Product1}
           alt="productImg"
@@ -35,11 +35,11 @@ function CartItems() {
       </div>
 
       {/* right side product details */}
-      <div className="flex flex-col gap-2 w-full p-4">
-        <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col gap-2 w-full px-2 py-3 md:p-4">
+        <div className="flex flex-row justify-between">
           <div>Sugar Free Gold Low Calories</div>
           <div>
-            <RxCross2 />
+            <RxCross2 className="font-semibold" />
           </div>
         </div>
         <div className="flex flex-row gap-4">

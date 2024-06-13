@@ -3,7 +3,7 @@ import ProductShort from './ProductShort'
 
 function MoretoLove() {
   return (
-    <div className='w-full h-max flex flex-wrap  mb-6 m-auto'>
+    <div className='md:w-full h-max flex flex-wrap w-[90%]  mb-6 mx-auto'>
         <ProductShort/>
         <ProductShort/>
         <ProductShort/>

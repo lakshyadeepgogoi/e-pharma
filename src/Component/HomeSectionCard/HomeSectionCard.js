@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 import FormatPrice from '../Helper/FormatPrice';
 
 function HomeSectionCard({ name, price,photos }) {
-  console.log("HomeSectionCard props:", { name, name, price }); // Log received props
 
   return (
-    <div className='sm:h-96 h-max w-[11rem] sm:w-[17rem] flex flex-col rounded-xl border-2 my-4 relative'>
+    <div className='sm:h-96 h-max w-[11rem] sm:w-[17rem] flex flex-col rounded-xl border-2 md:my-2 my-1 relative'>
       <Link to={`/Product-details`}>
       <div className='w-full object-cover h-40 sm:h-48'>
           {photos && photos.length > 0 ? (

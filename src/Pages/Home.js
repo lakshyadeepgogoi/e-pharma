@@ -128,7 +128,7 @@ function Home() {
             </div>
 
             {/* more to Love */}
-            <div className='flex flex-col gap-6 items-center justify-center'>
+            <div className='flex flex-col gap-6 w-full m-auto items-center justify-center'>
                 <p className='text-3xl font-semibold'>More to Love</p>
                 <div><MoretoLove/></div>
             </div>
