@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import landing from '../Component/Assets/landing img.png'
 import HomeSectionCarosal from '../Component/HomeSectionCard/HomeSectionCarosal';
 import HomeSectionCard from '../Component/HomeSectionCard/HomeSectionCard';
@@ -7,8 +7,30 @@ import offer1 from "../Component/Assets/Medicine/offer1.png"
 import offer2 from "../Component/Assets/Medicine/Offer2.png"
 import lastBanner from '../Component/Assets/Medicine/lastBanner.png'
 import MoretoLove from '../Component/Category/MoreToLove/MoretoLove';
+import axios from 'axios';
 
 function Home() {
+    
+    
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([])
+  
+    useEffect(() => {
+      const fetchData = async () =>{
+        setLoading(true);
+        try {
+          const {data: response} = await axios.get('http://localhost:4000/api/products');
+          setData(response);
+          console.log(response)
+        } catch (error) {
+          console.error(error.message);
+        }
+        setLoading(false);
+      }
+  
+      fetchData();
+    }, []);
+
   return (
     <div className='w-full h-full'>
         <div>
@@ -112,20 +134,7 @@ function Home() {
             </div>
             
 
-
-
-
-
-
-
         </div>
-
-
-
-
-
-
-
 
 
 

@@ -1,24 +1,37 @@
 import React, { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhoneCall } from "react-icons/fi";
-import Logo from "./Assets/Logo.png";
+import Logo from "../Assets/Logo.png";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotifications } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa6";
-import { VscAccount } from "react-icons/vsc";
-import Medicine from "./Assets/Medicine.png";
-import Health_care from "./Assets/Health_care.png";
-import Lab from "./Assets/Lab test.png";
-import ayurvadic from "./Assets/ayurvadic.png";
-import equipment from "./Assets/equipment.png";
-import surgical from "./Assets/surgical items.png";
 import { Link, NavLink } from "react-router-dom";
 import { FiShoppingBag } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { toast } from 'react-hot-toast';
+import Category from "./Category";
 
-export const Navbar = () => {
+
+
+export const Navbar = (props) => {
+
+
+  let isLoggedIn = props.isLoggedIn;
+let setIsLoggedIn = props.setIsLoggedIn;
+
+
+  const { token } = useSelector((state) => state.auth || {});
+const { user } = useSelector((state) => state.profile || {});
+const { totalItems } = useSelector((state) => state.cart || {});
+
+
+
   const [category, setCategory] = useState("");
   console.log(category);
+
+
+
 
   return (
     <div className="w-full m-auto  md:static">
@@ -44,18 +57,18 @@ export const Navbar = () => {
       {/* second section section */}
       <div className="w-full sm:flex flex-row justify-between h-24 items-center hidden ">
         {/* logo */}
+        <NavLink to="/">
         <div className="flex flex-row items-center gap-2 w-52 ml-8  h-full relative">
-          <NavLink to="/">
             <img src={Logo} alt="logo" />
             <span className="text-black font-bold text-xl  ">
               PULSE & PILLS
             </span>
-          </NavLink>
         </div>
+        </NavLink>
 
         {/* search bar */}
-        <div className=" m-auto h-full items-center  flex flex-row gap-4">
-          <div className="sm:w-96 md:w-[600px] flex flex-row h-12 mt-2 ">
+        <div className=" m-auto h-full items-center  flex flex-row gap-2">
+          <div className="sm:w-96 md:w-[500px] flex flex-row h-12 mt-2 ">
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -68,15 +81,15 @@ export const Navbar = () => {
 
           {/* upload slip */}
           <div className="">
-            <button className="bg-[#F2971F] w-32 h-12 rounded-full font-medium mt-2 text-white text-lg">
+            <button className="bg-[#F2971F] w-28 h-12 rounded-full font-medium mt-2 text-white text-lg">
               Upload
             </button>
           </div>
         </div>
 
         {/* right side like account and other */}
-        <div className="w-1/5 h-full flex flex-row justify-evenly  mr-4">
-          <div className="flex flex-row items-center gap-6 my-auto text-2xl">
+        <div className="w-[22%] h-full flex flex-row justify-evenly  mr-4">
+          <div className="flex flex-row items-center gap-5 my-auto text-2xl">
             <div className="relative">
               <div className="absolute">
                 <span className="text-xs">2</span>
@@ -87,17 +100,57 @@ export const Navbar = () => {
             </div>
 
             <div>
-              <FaCartShopping />
+              {/*  */}
+              {
+                <Link to="/cart" className="relative">
+                <FaCartShopping />{
+                  totalItems> 0 && (
+                    <span>
+                      {totalItems}
+                    </span>
+                  )
+                }
+                </Link>
+              }
             </div>
 
             <div>
               <FaRegHeart />
             </div>
           </div>
-          <div className="flex flex-row items-center gap-2 text-xl">
-            <VscAccount />
-            <span> Account</span>
-          </div>
+
+           {/* login - signup-logout - dashboard */}
+        <div className='flex items-center gap-x-4 '>
+            { !isLoggedIn &&
+                <Link to="/login">
+                    <button className='bg-richblack-800 text-richblack-100 py-[8px] px-[12px] rounded-[8px] border border-richblack-700' onClick={()=>{
+                        setIsLoggedIn(false);
+                        toast.success("Logged out")
+                    }}>Log in</button>
+                </Link>
+            }
+
+            { !isLoggedIn &&
+                <Link to="/signup">
+                    <button className='bg-richblack-800 text-richblack-100 py-[8px] px-[12px] rounded-[8px] border border-richblack-700'>Sign up</button>
+                </Link>
+            }
+
+            { isLoggedIn &&
+                <Link to="/">
+                    <button onClick={()=>{
+                        setIsLoggedIn(false);
+                        toast.success("Logged out")
+                    }}>Log out</button>
+                </Link>
+            }
+
+            { isLoggedIn &&
+                <Link to="/user/:Activepage">
+                    <button>Dashboard</button>
+                </Link>
+            }
+        </div>
         </div>
       </div>
 
@@ -135,98 +188,7 @@ export const Navbar = () => {
       </div>
 
       {/* category section */}
-      <div className=" w-full h-max md:h-36">
-        <div className="w-[91%] h-full md:bg-[#E7EFFF] m-auto rounded-xl">
-          <ul className="grid grid-cols-3  justify-between items-center h-full sm:grid-cols-6 gap-2">
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF]  md:bg-inherit rounded-2xl text-center pt-4 sm:p-2"
-            >
-              <Link to="/Medicine">
-                <img
-                  src={Medicine}
-                  alt="medicine "
-                  className="w-20 h-20 m-auto "
-                />
-                <span>Medicine</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF] md:bg-inherit  rounded-2xl text-center pt-4 sm:p-2"
-            >
-              <Link to="/Health">
-                <img
-                  src={Health_care}
-                  alt="Health_care "
-                  className="w-20 h-20 m-auto"
-                />
-                <span>Health care</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2"
-            >
-              <Link to="/Lab">
-                <img src={Lab} alt="Lab" className="w-20 h-20 m-auto" />
-                <span>Lab test</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2"
-            >
-              <Link to="/Surgical">
-                <img
-                  src={ayurvadic}
-                  alt="ayurvadic"
-                  className="w-20 h-20 m-auto"
-                />
-                <span>Surgical Items</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2"
-            >
-              <Link to="/Ayurvedic">
-                <img
-                  src={equipment}
-                  alt="equipment"
-                  className="w-20 h-20 m-auto"
-                />
-                <span>Ayurvedic Medicine</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => {
-                setCategory("");
-              }}
-              className=" mt-4 h-36 bg-[#E7EFFF] md:bg-inherit rounded-2xl text-center  pt-4 sm:p-2"
-            >
-              <Link to="/Equipment">
-                <img
-                  src={surgical}
-                  alt="surgical"
-                  className="w-20 h-20 m-auto"
-                />
-                <span>Equipment on Rent</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <Category/>
     </div>
   );
 };
