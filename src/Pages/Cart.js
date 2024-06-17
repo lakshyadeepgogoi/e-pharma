@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import CartItems from '../Component/CartProduct/CartItems'
 import { FaAngleLeft } from "react-icons/fa6";
 import { MdAddLocationAlt } from "react-icons/md";
+import { CartContext } from '../Context/ContextProvider';
+import { totalItem, totalPrice } from '../Context/CartReducer';
 
 
 
 function Cart() {
+  const {cart} = useContext(CartContext)
+
   return (
     <div className='md:w-4/5 w-full p-4 flex flex-col mx-auto my-5'>
       {/* address section */}
@@ -34,11 +38,13 @@ function Cart() {
           <div className='w-full md:p-10 p-4'>
           <div className='flex flex-row justify-between  my-4 text-[#9D9D9D]'>
             <div>My Orders</div>
-            <div>Total Items: 3</div>
+            <div>Total Items: {totalItem(cart)}</div>
           </div>
 
           <div className='md:px-4 w-full my-2'>
-            <CartItems/>
+          {cart.map((product) => (
+        <CartItems key={product.id && product._id} product={product} />
+      ))}
           </div>
           </div>
 
@@ -57,7 +63,7 @@ function Cart() {
             <div className='bg-[#f5f4f4] p-3 mt-2 mb-6 flex flex-col gap-3'>
               {/* subtotal */}
               <div className='flex flex-row justify-between items-center'>
-              <div className='text-gray-700 text-base'>Subtotal</div><div>100</div>
+              <div className='text-gray-700 text-base'>Subtotal</div><div>{totalPrice(cart)}</div>
               </div>
               {/* shipping charge */}
               <div className='flex flex-row justify-between items-center'>

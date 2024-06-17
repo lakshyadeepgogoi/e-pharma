@@ -1,20 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HomeSectionCard from '../HomeSectionCard/HomeSectionCard'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from 'axios';
 
 function Medicine() {
 
-  const [filter, setFilter] = React.useState('');
-
+  const [filter, setFilter] = useState('');
   const handleChange = (event: SelectChangeEvent) => {
-    setFilter(event.target.value);
+      setFilter(event.target.value);
   };
 
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+      const fetchData = async () => {
+          setLoading(true);
+          try {
+              const { data: response } = await axios.get('http://localhost:4000/api/products');
+              console.log("Fetched data:", response); // Debugging: log fetched data
+              setData(response);
+          } catch (error) {
+              console.error(error.message);
+          }
+          setLoading(false);
+      };
 
+      fetchData();
+  }, []);
+
+  // Category ID to filter by
+  const specificCategoryID = '666b2ff0c66fdd3ebd54d898';
+
+  const filteredData = data.filter(product => {
+      const matches = product.category && product.category._id === specificCategoryID;
+      console.log(`Product ID: ${product._id}, Category: ${product.category ? product.category._id : 'N/A'}, Matches: ${matches}`); // Debugging: log each product's category and if it matches
+      return matches;
+  });
+
+  console.log("Filtered data:", filteredData); // Debugging: log filtered data
+
+  // If no products with the specific category ID, show all products
+  const displayData = filteredData.length > 0 ? filteredData : data;
 
 
   return (
@@ -41,15 +71,20 @@ function Medicine() {
     </FormControl>
       </div>
     </div>     
-     <div className='flex flex-wrap gap-2 md:gap-3  '>
-      <HomeSectionCard/>
-      <HomeSectionCard/>
-      <HomeSectionCard/>
-      <HomeSectionCard/>
-      <HomeSectionCard/>
-      <HomeSectionCard/>
-
-      </div>
+    <div className='flex flex-wrap gap-2 md:gap-3'>
+                {
+                    displayData.map(product => (
+                        <HomeSectionCard
+                            key={product._id}
+                            id={product._id}
+                            name={product.title}
+                            price={product.discountFees}
+                            photos={product.images}
+                            tag={product.tags}
+                        />
+                    ))
+                }
+            </div>
     </div>
   )
 }

@@ -114,7 +114,7 @@ function Home() {
 
             {/* products */}
             <div className='mt-6 mb-12'>
-                <div className='hidden sm:block'><HomeSectionCarosal /></div>
+                <div className='hidden sm:block'><HomeSectionCarosal/></div>
                 <div className='flex flex-row gap-3 sm:hidden my-4'>
                 <HomeSectionCard/>
                 <HomeSectionCard/>

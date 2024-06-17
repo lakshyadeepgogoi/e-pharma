@@ -7,6 +7,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./Reducer";
 import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from 'recoil';
+import { BrowserRouter } from 'react-router-dom';
+import ContextProvider from "./Context/ContextProvider";
 
 const store = configureStore({
   reducer: rootReducer,
@@ -18,8 +20,12 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
       <Provider store={store}>
-        <App />
-        <Toaster />
+        <ContextProvider>
+          <BrowserRouter>
+            <App />
+            <Toaster />
+          </BrowserRouter>
+        </ContextProvider>
       </Provider>
     </RecoilRoot>
   </React.StrictMode>

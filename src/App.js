@@ -17,13 +17,15 @@ import Dashboard from "./Pages/Dashboard";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const location = useLocation().state;
+  
   return (
     <div className="app-container">
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -31,24 +33,23 @@ function App() {
           <Route path="/Health" element={<Health />} />
           <Route path="/Lab" element={<Lab />} />
           <Route path="/Surgical" element={<Surgical />} />
-          <Route path="/Ayurvedic" element={<Ayurvedic />} />
+          <Route path="/Ayurvedic" element={<Ayurvedic data = {location}/>} />
           <Route path="/Equipment" element={<Equipment />} />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
-          <Route
-            path="/user/:activepage"
+          <Route path="/user/:activepage"
             element={
               <PrivateRoute isLoggedIn={isLoggedIn}>
                 <Dashboard />
               </PrivateRoute>
             }
           />
-          <Route path="/Product-details" element={<ProductDetails />} />
+          <Route path="/Product-details/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<Error />} />
         </Routes>
         <Footer />
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </div>
   );
 }
