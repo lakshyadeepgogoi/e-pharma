@@ -6,18 +6,24 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotifications } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa6";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiShoppingBag } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { toast } from 'react-hot-toast';
 import Category from "./Category";
 import { CartContext } from "../../Context/ContextProvider";
 
-
 export const Navbar = (props) => {
   const {cart} = useContext(CartContext);
   const isLoggedIn = props.isLoggedIn;
   const setIsLoggedIn = props.setIsLoggedIn;
+
+
+const navigate =  useNavigate();
+  const UploadHandler  = async () => {
+    navigate('/prescription')
+  }
+
 
   const { token } = useSelector((state) => state.auth || {});
   const { user } = useSelector((state) => state.profile || {});
@@ -79,7 +85,7 @@ export const Navbar = (props) => {
 
           {/* upload slip */}
           <div>
-            <button className="bg-[#F2971F] w-28 h-12 rounded-full font-medium mt-2 text-white text-lg">
+            <button className="bg-[#F2971F] w-28 h-12 rounded-full font-medium mt-2 text-white text-lg" onClick={UploadHandler}>
               Upload
             </button>
           </div>

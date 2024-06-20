@@ -18,6 +18,8 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import Prescription from "./Pages/Prescription";
+import BottomNavigation from "./Component/BottomNavigation";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -45,10 +47,12 @@ function App() {
             }
           />
           <Route path="/Product-details/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart isLoggedIn={isLoggedIn} />} />
           <Route path="*" element={<Error />} />
+          <Route path="/prescription" element={<Prescription/>} />
         </Routes>
         <Footer />
+        <BottomNavigation/>
       {/* </BrowserRouter> */}
     </div>
   );

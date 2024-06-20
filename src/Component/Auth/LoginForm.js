@@ -1,69 +1,116 @@
-import React, { useState } from 'react'
-import { toast } from 'react-hot-toast'
-import { AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function LoginForm({setIsLoggedIn}) {
+function LoginForm({ setIsLoggedIn }) {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    phoneNumber: '',
+    otp: '',
+  });
 
+  const [otpSent, setOtpSent] = useState(false);
 
-
-
-    const[formData, setFormData] =useState({
-        Mobilenumber:"", password:""
-    })
-
-    const [showPassword, setShowPassword] = useState(false)
-
-    function changeHandler(event){
-            setFormData( (prevData) =>(
-                {             ...prevData,
-                    [event.target.name]:event.target.value}
-             
-
-            ))
+  const changeHandler = ({ target: { name, value } }) => {
+    if (name === 'phoneNumber') {
+      // Restricting to 10 digits
+      if (value.length > 10) return;
+      // Ensure that value only contains numbers
+      if (!/^\d*$/.test(value)) return;
     }
 
-    function sumbitHandler(event){ 
-        event.preventDefault();
-        setIsLoggedIn(true);
-        toast.success("Logged In");
-        navigate("/")
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const sendOtpHandler = async () => {
+    const accountData = { phoneNumber: '+91' + formData.phoneNumber };
+    try {
+      await axios.post('http://localhost:4000/api/users/send-otp', accountData);
+      toast.success('OTP Sent');
+      setOtpSent(true);
+    } catch (error) {
+      toast.error('Failed to send OTP');
+      console.error('Error sending OTP:', error);
     }
+  };
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const verificationData = {
+        phoneNumber:'+91' + formData.phoneNumber,
+        otp:formData.otp,
+      };
+      console.log(verificationData);
+      await axios.post('http://localhost:4000/api/users/verify-otp', verificationData);
+      
+      setIsLoggedIn(true);
+      toast.success('Logged In');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to verify OTP');
+      console.error('Error verifying OTP:', error);
+    }
+  };
 
   return (
-   <form onSubmit={sumbitHandler} className='flex flex-col w-full gap-y-4 mt-6'>
-   <label className=' w-full '>
-    <p className='text-[0.875rem] text-richblack-5 mb-1 leading-[1.375rem]'>
-        Enter Mobile No.<sup className=' text-pink-200'>*</sup>
-    </p>
-    <input className='bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px]' required type='number' value={formData.email} onChange={changeHandler} placeholder='enter Mobile Number' name='Mobilenumber'></input>
-   </label>
+    <form onSubmit={submitHandler} className='flex flex-col w-full gap-y-4 mt-6'>
+      <label className='w-full'>
+        <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
+          Enter Mobile No.<sup className='text-pink-200'>*</sup>
+        </p>
+        <div className='flex items-center'>
+          <span className='rounded-md p-3 border-2 bg-gray-100'>+91</span>
+          <input
+            className='border-2 border-gray-400 rounded-[0.5rem] w-full p-[12px]'
+            required
+            type='tel'
+            value={formData.phoneNumber}
+            onChange={changeHandler}
+            placeholder='Enter Mobile Number'
+            name='phoneNumber'
+            pattern='[0-9]{10}'
+            maxLength={10}
+          />
+        </div>
+      </label>
 
-   <label className='relative w-full '>
-    <p className='text-[0.875rem] text-richblack-5 mb-1 leading-[1.375rem]'>
-        password<sup className=' text-pink-200'>*</sup>
-    </p>
+      {otpSent && (
+        <label className='relative w-full'>
+          <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
+            Enter OTP<sup className='text-pink-200'>*</sup>
+          </p>
+          <input
+            className='border-2 border-gray-400 rounded-[0.5rem] w-full p-[12px]'
+            required
+            value={formData.otp}
+            onChange={changeHandler}
+            placeholder='Enter OTP'
+            name='otp'
+          />
+        </label>
+      )}
 
-    <input className='bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px]' required type={showPassword? ("text"):("password")} value={formData.password} onChange={changeHandler} placeholder='enter password' name='password'/>
-
-    <span className='absolute right-3 top-[38px] cursor-pointer ' onClick={()=>setShowPassword((prev) => !prev)}>
-        {showPassword?(<AiOutlineEyeInvisible fontSize={24} fill='#AFB2BF'/>):(<AiOutlineEye fontSize={24} fill='#AFB2BF'/>)}
-    </span>
-
-    <Link to="#">
-        <p className='text-xs mt-1 text-blue-100 max-w-max ml-auto'>Forget Password</p>
-    </Link>
-   </label>
-
-   <button className='bg-yellow-50 rounded-[8px] font-medium  text-richblack-900 px-[12px] py-[8px] mt-7' >
-    Sign In
-   </button>
-
-
-   </form>
-  )
+      {!otpSent ? (
+        <button
+          type='button'
+          onClick={sendOtpHandler}
+          className='bg-green-200 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'
+        >
+          Send OTP
+        </button>
+      ) : (
+        <button type='submit' className='bg-yellow-50 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'>
+          Sign In
+        </button>
+      )}
+    </form>
+  );
 }
 
-export default LoginForm
+export default LoginForm;

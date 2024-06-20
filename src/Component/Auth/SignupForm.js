@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 const SignupForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -8,107 +9,164 @@ const SignupForm = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    Mobile: '',
-    OTP: '',
+    phoneNumber: '',
+    otp: '',
   });
 
-  function changeHandler(event) {
+  const [otpSent, setOtpSent] = useState(false);
+
+  const changeHandler = ({ target: { name, value } }) => {
+    if (name === 'phoneNumber') {
+      // Restricting to 10 digits
+      if (value.length > 10) return;
+      // Ensure that value only contains numbers
+      if (!/^\d*$/.test(value)) return;
+    }
+
     setFormData((prevData) => ({
       ...prevData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     }));
-  }
+  };
 
-  function submitHandler(event) {
+  const sendOtpHandler = async () => {
+    const accountData = { 
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phoneNumber: '+91' + formData.phoneNumber 
+    };
+    // const accountData = { ...formData, phoneNumber: '+91' + formData.phoneNumber };
+    try {
+      await axios.post('http://localhost:4000/api/users/send-otp', accountData);
+      toast.success('OTP Sent');
+      setOtpSent(true);
+    } catch (error) {
+      toast.error('Failed to send OTP');
+      console.error('Error sending OTP:', error);
+    }
+  };
+
+  const submitHandler = async (event) => {
     event.preventDefault();
-    setIsLoggedIn(true);
-    toast.success('Account Created');
-    const accountData = { ...formData };
-    console.log(accountData); // You can send this data to your backend or use it as needed
-    navigate('/dashboard');
-  }
+    try {
+      const verificationData = {
+        phoneNumber: '+91' + formData.phoneNumber,
+        otp: formData.otp,
+      };
+      await axios.post('http://localhost:4000/api/users/verify-otp', verificationData);
+      setIsLoggedIn(true);
+      toast.success('Account Created');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to verify OTP');
+      console.error('Error verifying OTP:', error);
+    }
+  };
 
   return (
     <div>
       <form onSubmit={submitHandler}>
         {/* First Name and Last Name */}
-        <div className='flex gap-x-4 mt-[20px]'>
+        <div className='flex gap-x-4 mt-5'>
           <label className='w-full'>
-            <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
+            <p className='text-sm mb-1 leading-6'>
               First Name <sup className='text-pink-200'>*</sup>
             </p>
             <input
-              className='border-2 rounded-[0.5rem] w-full p-[12px]'
+              className='border-2 rounded-md w-full p-3'
               required
               type='text'
               name='firstName'
               onChange={changeHandler}
               placeholder='Enter first name'
               value={formData.firstName}
+              aria-label='First Name'
             />
           </label>
 
           <label className='w-full'>
-            <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
+            <p className='text-sm mb-1 leading-6'>
               Last Name <sup className='text-pink-200'>*</sup>
             </p>
             <input
-              className='border-2 rounded-[0.5rem]  w-full p-[12px]'
+              className='border-2 rounded-md w-full p-3'
               required
               type='text'
               name='lastName'
               onChange={changeHandler}
               placeholder='Enter last name'
               value={formData.lastName}
+              aria-label='Last Name'
             />
           </label>
         </div>
 
         {/* Mobile Number */}
-        <div className='mt-[20px]'>
+        <div className='mt-5'>
           <label className='relative'>
-            <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
+            <p className='text-sm mb-1 leading-6'>
               Enter Mobile Number <sup>*</sup>
             </p>
-            <input
-              className='rounded-[0.5rem] w-full p-[12px] border-2'
-              required
-              type='Number'
-              name='Mobile'
-              onChange={changeHandler}
-              placeholder='Enter mobile number'
-              value={formData.Mobile}
-            />
+            <div className='flex items-center'>
+              <span className='rounded-md p-3 border-2 bg-gray-100'>+91</span>
+              <input
+                className='rounded-md w-full p-3 border-2'
+                required
+                type='tel'
+                name='phoneNumber'
+                onChange={changeHandler}
+                placeholder='Enter mobile number'
+                value={formData.phoneNumber}
+                aria-label='Mobile Number'
+                maxLength={10}
+              />
+            </div>
           </label>
         </div>
 
-        {/* OTP */}
-        <div className='flex w-full gap-x-4 mt-[20px]'>
-          <label className='w-full relative'>
-            <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
-              Enter OTP <sup>*</sup>
-            </p>
-            <input
-              className='rounded-[0.5rem] text-black w-full p-[12px] border-2'
-              required
-              type='text'
-              name='OTP'
-              onChange={changeHandler}
-              placeholder='Enter OTP'
-              value={formData.OTP}
-            />
-          </label>
+        {/* Send OTP Button */}
+        {!otpSent && (
+          <button
+            type='button'
+            onClick={sendOtpHandler}
+            className='w-full bg-green-200 rounded-md font-medium text-richblack-900 px-3 py-2 mt-7'
+          >
+            Send OTP
+          </button>
+        )}
 
-          <label className='relative w-[30%] gap-x-2'>
-            <button className='w-full bg-green-200 rounded-[8px] font-medium text-richblack-900 px-[8px] py-[6px] mt-7 border-2'>
-              Confirm OTP
+        {/* OTP Input */}
+        {otpSent && (
+          <>
+            <div className='flex w-full gap-x-4 mt-5'>
+              <label className='w-full relative'>
+                <p className='text-sm mb-1 leading-6'>
+                  Enter OTP <sup>*</sup>
+                </p>
+                <input
+                  className='rounded-md text-black w-full p-3 border-2'
+                  required
+                  type='number'
+                  name='otp'
+                  onChange={changeHandler}
+                  placeholder='Enter otp'
+                  value={formData.otp}
+                  aria-label='otp'
+                  pattern='[0-9]{10}'
+                  maxLength={6}
+
+                />
+              </label>
+            </div>
+
+            <button
+              type='submit'
+              className='w-full bg-yellow-50 rounded-md font-medium text-richblack-900 px-3 py-2 mt-7'
+            >
+              Verify OTP
             </button>
-          </label>
-        </div>
-
-        <button className='w-full bg-yellow-50 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'>
-          Create Account
-        </button>
+          </>
+        )}
       </form>
     </div>
   );
