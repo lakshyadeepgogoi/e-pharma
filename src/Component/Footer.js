@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from "./Assets/Logo1.png";
+import Logo from "./Assets/Logo.png";
 import Payment from "./Assets/payments2.png.png";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MailIcon from '@mui/icons-material/Mail';

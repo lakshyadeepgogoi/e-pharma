@@ -2,7 +2,8 @@ import React from 'react'
 import offerMedicine from '../Assets/Medicine/offerMedicine.png'
 import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 
-function OffersCards() {
+function OffersCards({key, title, price, image}) {
+  const product = {key, title, price,image};
   return (
     <div className=' h-[22rem] flex flex-row my-6 rounded-lg border-2 txt-[#184363]'>
     {/* image section */}

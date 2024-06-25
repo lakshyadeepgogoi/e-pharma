@@ -62,9 +62,9 @@ const navigate =  useNavigate();
       <div className="w-full sm:flex flex-row justify-between h-24 items-center hidden">
         {/* logo */}
         <NavLink to="/">
-          <div className="flex flex-row items-center gap-2 w-52 ml-8 h-full relative">
-            <img src={Logo} alt="logo" />
-            <span className="text-black font-bold text-xl">
+          <div className="flex flex-row  items-center w-60 ml-8 h-full relative">
+            <img src={Logo} alt="logo" className="w-20 h-16"/>
+            <span className="text-black font-bold text-xl inline w-full">
               PULSE & PILLS
             </span>
           </div>

@@ -24,14 +24,13 @@ function HomeSectionCarousel() {
   }, []);
 
   const responsive = {
-    0: { items: 1 },
+    0: { items: 1.7 },
     608: { items: 2 },
     1024: { items: 3 },
     1524: { items: 4 },
   };
 
   const items = products.map((product) => {
-    console.log("Product item:", product); // Log each product
     return (
       <HomeSectionCard
         key={product._id} // Add a unique key prop

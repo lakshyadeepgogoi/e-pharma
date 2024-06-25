@@ -11,7 +11,6 @@ import axios from "axios";
 
 const Category = () => {
   const [category, setCategory] = useState("");
-  console.log(category);
 
   const [loading, setLoading] = useState(true);
     const [data, setData] = useState([])
@@ -24,7 +23,6 @@ const Category = () => {
         try {
           const {data: response} = await axios.get('http://localhost:4000/api/categories');
           setData(response);
-          console.log(response)
         } catch (error) {
           console.error(error.message);
         }
