@@ -3,7 +3,7 @@ import { RxCross2 } from "react-icons/rx";
 import FormatPrice from "../Helper/FormatPrice";
 import axios from "axios";
 
-function CartItems({ product, onRemove }) {
+function CartItems({ product, onRemove,onQuantityChange  }) {
   console.log(product)
   const deleteProduct = async () => {
     try {
@@ -41,13 +41,51 @@ function CartItems({ product, onRemove }) {
   const name = product.productId.title;
   const truncatedName = truncateString(name, 50); // Adjust the number as needed
 
-  function increment() {
-    // Implement increment logic
-  }
+ 
+  const increment = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const userResponse = await axios.get(`http://localhost:4000/api/users/getUsers`, config);
+        const userId = userResponse.data._id;
 
-  function decrement() {
-    // Implement decrement logic
-  }
+        await axios.post('http://localhost:4000/api/cart/add', {
+          productId: product.productId._id,
+          quantity: 1
+        }, config);
+
+        onQuantityChange(product.productId._id, product.quantity + 1);
+      }
+    } catch (error) {
+      console.error("Error incrementing product quantity:", error);
+    }
+  };
+
+  const decrement = async () => {
+    try {
+      if (product.quantity > 1) {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const config = {
+            headers: { Authorization: `Bearer ${token}` }
+          };
+          const userResponse = await axios.get(`http://localhost:4000/api/users/getUsers`, config);
+          const userId = userResponse.data._id;
+
+          await axios.post('http://localhost:4000/api/cart/add', {
+            productId: product.productId._id,
+            quantity: -1
+          }, config);
+
+          onQuantityChange(product.productId._id, product.quantity - 1);
+        }
+      }
+    } catch (error) {
+      console.error("Error decrementing product quantity:", error);
+    }};
 
   return (
     <div className="flex flex-row w-full h-52 lg:h-44 border-2 border-[#d0cece] ">
@@ -87,7 +125,7 @@ function CartItems({ product, onRemove }) {
               <button
                 type="button"
                 className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => decrement()}
+                onClick={decrement}
                 disabled={product.quantity === 1}
               >
                 <svg
@@ -114,8 +152,7 @@ function CartItems({ product, onRemove }) {
               <button
                 type="button"
                 className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => increment()}
-              >
+                onClick={increment}              >
                 <svg
                   className="flex-shrink-0 size-3.5"
                   xmlns="http://www.w3.org/2000/svg"

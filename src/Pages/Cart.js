@@ -43,6 +43,12 @@ function Cart({ isLoggedIn }) {
     setCartProduct(cartProduct.filter(item => item.productId._id !== productId));
   };
 
+  const handleQuantityChange = (productId, newQuantity) => {
+    setCartProduct(cartProduct.map(item => 
+      item.productId._id === productId ? { ...item, quantity: newQuantity } : item
+    ));
+  };
+
   const handlePlaceOrder = async () => {
     if (!isLoggedIn) {
       navigate('/login');
@@ -70,6 +76,15 @@ function Cart({ isLoggedIn }) {
           await axios.post('http://localhost:4000/api/orders/placeOrder', orderDetails, config);
           alert('Order placed successfully');
           navigate('/');
+
+          const userResponse = await axios.get('http://localhost:4000/api/users/getUsers', config);
+          const id = userResponse.data._id
+          
+          // remove all items
+          await axios.delete(`http://localhost:4000/api/cart/clear/${id}`);
+          alert('Order placed successfully');
+          navigate('/');
+
         }
       } catch (error) {
         console.error('Error placing order:', error);
@@ -144,7 +159,8 @@ function Cart({ isLoggedIn }) {
 
             <div className='md:px-4 w-full my-2'>
               {cartProduct.map((product) => (
-                <CartItems key={product.productId._id} product={product} onRemove={handleRemoveItem} />
+                <CartItems key={product.productId._id} product={product} onRemove={handleRemoveItem} onQuantityChange={handleQuantityChange}
+ />
               ))}
             </div>
           </div>
