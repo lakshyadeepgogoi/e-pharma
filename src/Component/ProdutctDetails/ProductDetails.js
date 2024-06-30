@@ -5,7 +5,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ProductShort from "../Category/MoreToLove/ProductShort";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import FormatPrice from "../Helper/FormatPrice";
 
@@ -13,13 +13,11 @@ function ProductDetails() {
   const [product, setProduct] = useState({});
   const [productRecommed, setProductRecommed] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("PRODUCT DETAIL");
+  const [mainImage, setMainImage] = useState(Product1);
   const { id } = useParams();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const quantity = 1;
-
-
-
-
 
   useEffect(() => {
     const getProduct = async () => {
@@ -27,6 +25,9 @@ function ProductDetails() {
       try {
         const { data: response } = await axios.get(`http://localhost:4000/api/products/${id}`);
         setProduct(response);
+        if (response.images && response.images.length > 0) {
+          setMainImage(response.images[0]);
+        }
       } catch (error) {
         console.error(error.message);
       }
@@ -50,8 +51,6 @@ function ProductDetails() {
     fetchData();
   }, []);
 
-  
-
   const addToCart = async () => {
     try {
       const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
@@ -65,8 +64,6 @@ function ProductDetails() {
     }
   };
 
-
-
   // Function to get a random subset of products
   const getRandomProducts = (items, limit) => {
     if (!Array.isArray(items)) {
@@ -77,6 +74,24 @@ function ProductDetails() {
   };
 
   const randomProducts = getRandomProducts(productRecommed, 8); // Adjust the number 8 to limit the number of products shown
+
+  // Content based on active tab
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "PRODUCT DETAIL":
+        return <div className="text-[#090F47] opacity-55">{product.description}</div>;
+      case "SAFETY ADVICE":
+        return <div className="text-[#090F47] opacity-55">Safety advice content goes here.</div>;
+      case "FAQ":
+        return <div className="text-[#090F47] opacity-55">FAQ content goes here.</div>;
+      case "PRODUCT SUBSTITUTES":
+        return <div className="text-[#090F47] opacity-55">Product substitutes content goes here.</div>;
+      case "CUSTOMERS ALSO BOUGHT":
+        return <div className="text-[#090F47] opacity-55">Customers also bought content goes here.</div>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="p-2 md:px-0 mx-auto w-full md:w-[87%] flex flex-col h-max my-10">
@@ -92,12 +107,33 @@ function ProductDetails() {
           {/* Product details */}
           <div className="w-full flex flex-col sm:flex-row h-max gap-4 mt-4">
             {/* image section */}
-            <div className="w-[90%] mx-auto md:w-[50%] h-[400px] md:h-[500px] bg-[#F8F8F8]">
-              <img
-                src={product.images && product.images.length > 0 ? product.images[0] : Product1}
-                alt="productImage"
-                className="w-full h-full"
-              />
+            <div className="w-[90%] mx-auto md:w-[50%]">
+              <div className="h-[400px] md:h-[500px] bg-[#F8F8F8]">
+                <img
+                  src={mainImage}
+                  alt="productImage"
+                  className="w-full h-full"
+                />
+              </div>
+              <div className="flex gap-2 mt-4">
+                {product.images && product.images.length > 0 ? (
+                  product.images.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`productImage${index}`}
+                      className="w-20 h-20 cursor-pointer"
+                      onClick={() => setMainImage(image)}
+                    />
+                  ))
+                ) : (
+                  <img
+                    src={Product1}
+                    alt="productImageDefault"
+                    className="w-20 h-20 cursor-pointer"
+                  />
+                )}
+              </div>
             </div>
             {/* product ordering function */}
             <div className="md:pl-8 p-4 w-full md:w-[50%]">
@@ -112,8 +148,8 @@ function ProductDetails() {
                 </div>
               </div>
               {/* package details */}
-              <div className="mt-">
-              <div className="my-4">weight: {product.weight}gm</div>
+              <div className="mt-4">
+                <div className="my-4">Weight: {product.weight}gm</div>
                 <ul className="space-y-2 text-gray-400">
                   <li>*This product cannot be returned for a refund or exchange.</li>
                   <li>* Country of Origin: India</li>
@@ -122,29 +158,27 @@ function ProductDetails() {
               </div>
               {/* buy buttons */}
               <div className="mt-12 p-4 flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                  <button className="w-80 md:w-52 h-14 rounded-lg bg-[#7D8CFF] text-xl hover:bg-[#4B5DE7] font-semibold" 
-                  onClick={addToCart}>
-                    Add to bag 
-                    <ShoppingCartOutlinedIcon />
-                  </button>
+                <button className="w-80 md:w-52 h-14 rounded-lg bg-[#7D8CFF] text-xl hover:bg-[#4B5DE7] font-semibold" 
+                onClick={addToCart}>
+                  Add to bag 
+                  <ShoppingCartOutlinedIcon />
+                </button>
               </div>
             </div>
           </div>
           {/* description */}
-          <div className="mt-8 p-2">
+          <div className="mt-8 p-2 min-h-72">
             <div>
-              <ul className="hidden md:flex flex-row gap-12 items-center justify-center leading-8 text-xl border-t-2 border-b-2 border-gray-200 my-6">
-                <li>PRODUCT DETAIL</li>
-                <li>SAFETY ADVICE</li>
-                <li>FAQ</li>
-                <li>PRODUCT SUBSTITUTES</li>
-                <li>CUSTOMERS ALSO BOUGHT</li>
+              <ul className="flex flex-row overflow-x-auto  gap-8 md:gap-12 items-start justify-start md:items-center md:justify-center leading-4 md:leading-8 text-lg md:text-xl border-t-2 border-b-2 border-gray-200 my-6">
+                <li onClick={() => setActiveTab("PRODUCT DETAIL")} className={`cursor-pointer inline-block ${activeTab === "PRODUCT DETAIL" ? "font-bold" : ""}`}>PRODUCT DETAIL</li>
+                <li onClick={() => setActiveTab("SAFETY ADVICE")} className={`cursor-pointer ${activeTab === "SAFETY ADVICE" ? "font-bold" : ""}`}>SAFETY ADVICE</li>
+                <li onClick={() => setActiveTab("FAQ")} className={`cursor-pointer ${activeTab === "FAQ" ? "font-bold" : ""}`}>FAQ</li>
+                <li onClick={() => setActiveTab("PRODUCT SUBSTITUTES")} className={`cursor-pointer ${activeTab === "PRODUCT SUBSTITUTES" ? "font-bold" : ""}`}>PRODUCT SUBSTITUTES</li>
+                <li onClick={() => setActiveTab("CUSTOMERS ALSO BOUGHT")} className={`cursor-pointer ${activeTab === "CUSTOMERS ALSO BOUGHT" ? "font-bold" : ""}`}>CUSTOMERS ALSO BOUGHT</li>
               </ul>
               <div className="p-2 flex flex-col gap-2">
-                <h1 className="text-xl font-semibold">PRODUCT DETAIL</h1>
-                <div className="text-[#090F47] opacity-55">
-                  {product.description}
-                </div>
+                <h1 className="text-xl font-semibold">{activeTab}</h1>
+                {renderTabContent()}
               </div>
             </div>
           </div>
