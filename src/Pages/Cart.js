@@ -1,41 +1,79 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CartItems from '../Component/CartProduct/CartItems';
 import { FaAngleLeft } from "react-icons/fa6";
 import { MdAddLocationAlt } from "react-icons/md";
-import { CartContext } from '../Context/ContextProvider';
-import { totalItem, totalPrice } from '../Context/CartReducer';
 import axios from 'axios';
 
-function Cart({ isLoggedIn, user }) {
-  const { cart } = useContext(CartContext);
+function Cart({ isLoggedIn }) {
   const navigate = useNavigate();
   const [address, setAddress] = useState('');
   const [newAddress, setNewAddress] = useState('');
+  const [cartProduct, setCartProduct] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!isLoggedIn) {
+        navigate('/login');
+      } else {
+        try {
+          const token = localStorage.getItem('token');
+          if (token) {
+            const config = {
+              headers: { Authorization: `Bearer ${token}` }
+            };
+
+            const userResponse = await axios.get('http://localhost:4000/api/users/getUsers', config);
+            const userId = userResponse.data._id;
+
+            const cartResponse = await axios.get(`http://localhost:4000/api/cart/${userId}`, config);
+            setCartProduct(cartResponse.data.items);
+          }
+        } catch (error) {
+          console.error('Error fetching cart products:', error);
+        }
+      }
+    };
+
+    fetchProduct();
+  }, [isLoggedIn, navigate]);
+
+  const handleRemoveItem = (productId) => {
+    setCartProduct(cartProduct.filter(item => item.productId._id !== productId));
+  };
 
   const handlePlaceOrder = async () => {
     if (!isLoggedIn) {
       navigate('/login');
+    } else if (!address.trim()) {
+      setErrorMessage('Please enter a valid address to place the order.');
     } else {
       try {
-        const products = cart.map(item => ({
-          productId: item.id || item._id,
-          quantity: item.quantity,
-          price: item.price
-        }));
-        
-        const orderData = {
-          userId: user._id, // Assuming `user` prop has the user's ID
-          products,
-          shippingAddress: address,
-          totalAmount: totalPrice(cart)
-        };
+        const token = localStorage.getItem('token');
+        if (token) {
+          const config = {
+            headers: { Authorization: `Bearer ${token}` }
+          };
 
-        const response = await axios.post('/api/orders/create', orderData);
-        console.log('Order placed successfully:', response.data);
-        // Clear the cart or navigate to a confirmation page
+          const orderDetails = {
+            shippingAddress: address,
+            items: cartProduct.map(item => ({
+              productId: item.productId._id,
+              quantity: item.quantity,
+              price: item.productId.discountFees || item.productId.regularFees,
+            })),
+            totalAmount: calculateTotalPrice(),
+            phNumber: '' // Replace with actual phone number from user data
+          };
+
+          await axios.post('http://localhost:4000/api/orders/placeOrder', orderDetails, config);
+          alert('Order placed successfully');
+          navigate('/');
+        }
       } catch (error) {
         console.error('Error placing order:', error);
+        alert('Failed to place order');
       }
     }
   };
@@ -44,13 +82,19 @@ function Cart({ isLoggedIn, user }) {
     setNewAddress(e.target.value);
   };
 
-
-
   const updateAddress = () => {
     if (newAddress.trim()) {
       setAddress(newAddress);
       setNewAddress('');
+      setErrorMessage('');
     }
+  };
+
+  const calculateTotalPrice = () => {
+    return cartProduct.reduce((total, item) => {
+      const price = item.productId.discountFees || item.productId.regularFees;
+      return total + (price * item.quantity);
+    }, 0) + 20;
   };
 
   return (
@@ -79,6 +123,7 @@ function Cart({ isLoggedIn, user }) {
         </div>
       </div>
       <p className='text-xl my-2'>Current Address: {address}</p>
+      {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
 
       {/* product checkout details */}
       <div className='my-10 w-full flex md:flex-row flex-col gap-6'>
@@ -94,12 +139,12 @@ function Cart({ isLoggedIn, user }) {
           <div className='w-full md:p-10 p-4'>
             <div className='flex flex-row justify-between my-4 text-[#9D9D9D]'>
               <div>My Orders</div>
-              <div>Total Items: {totalItem(cart)}</div>
+              <div>Total Items: {cartProduct.length}</div>
             </div>
 
             <div className='md:px-4 w-full my-2'>
-              {cart.map((product) => (
-                <CartItems key={product.id || product._id} product={product} />
+              {cartProduct.map((product) => (
+                <CartItems key={product.productId._id} product={product} onRemove={handleRemoveItem} />
               ))}
             </div>
           </div>
@@ -123,7 +168,7 @@ function Cart({ isLoggedIn, user }) {
               {/* subtotal */}
               <div className='flex flex-row justify-between items-center'>
                 <div className='text-gray-700 text-base'>Subtotal</div>
-                <div>{totalPrice(cart)}</div>
+                <div>{calculateTotalPrice() - 20}</div>
               </div>
               {/* shipping charge */}
               <div className='flex flex-row justify-between items-center'>
@@ -132,8 +177,7 @@ function Cart({ isLoggedIn, user }) {
               </div>
               {/* tax */}
               <div className='flex flex-row justify-between items-center'>
-                <div className='text-gray-700 text-base'>Tax 15%</div>
-                <div>15</div>
+                <div className='text-gray-700 text-base'>including Tax</div>
               </div>
             </div>
             {/* buttons */}

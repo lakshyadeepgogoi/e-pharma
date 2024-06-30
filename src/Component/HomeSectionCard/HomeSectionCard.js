@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import FormatPrice from '../Helper/FormatPrice';
 import { CartContext } from '../../Context/ContextProvider';
 
-function HomeSectionCard({ name, price, photos, tag, id , quantity}) {
-
-  const product = { name, price, photos, tag, id, quantity  };
-
+function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
+  const product = { name, price, photos, tag, id, quantity };
   const { dispatch } = useContext(CartContext);
 
   const truncateString = (str, num) => {
@@ -21,8 +20,24 @@ function HomeSectionCard({ name, price, photos, tag, id , quantity}) {
   };
 
   const tagString = Array.isArray(tag) && tag.length > 0 ? tag[0] : '';
-  const truncatedTag = truncateString(tagString, 20); // Adjust the number as needed
-  const truncatedName = truncateString(name, 25); // Adjust the number as needed
+  const truncatedTag = truncateString(tagString, 20);
+  const truncatedName = truncateString(name, 25);
+
+  const addToCart = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+      const response = await axios.post(
+        'http://localhost:4000/api/cart/add', // Replace with your backend URL
+        { productId: id, quantity: quantity || 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status === 201) {
+        dispatch({ type: 'Add', product });
+      }
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
 
   return (
     <div className='sm:h-96 h-max w-[11rem] sm:w-[17rem] flex flex-col rounded-xl border-2 md:my-2 my-1 relative'>
@@ -47,7 +62,7 @@ function HomeSectionCard({ name, price, photos, tag, id , quantity}) {
       </Link>
       <button 
         className='text-center align-middle bg-[#EDF4] h-10 w-full mx-auto rounded-full mb-2 hover:bg-[#FFC000] hidden sm:block' 
-        onClick={() => dispatch({ type: "Add", product })}
+        onClick={addToCart}
       >
         Add to Cart
       </button>

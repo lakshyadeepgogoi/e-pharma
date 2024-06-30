@@ -1,32 +1,60 @@
-import React, { useContext } from "react";
+import React from "react";
 import { RxCross2 } from "react-icons/rx";
 import FormatPrice from "../Helper/FormatPrice";
-import { CartContext } from "../../Context/ContextProvider";
+import axios from "axios";
 
-function CartItems({ product }) {
-  const { cart, dispatch } = useContext(CartContext);
-  const product_Id = product.id || product._id;
+function CartItems({ product, onRemove }) {
+  console.log(product)
+  const deleteProduct = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const userResponse = await axios.get(`http://localhost:4000/api/users/getUsers`, config);
+        const userId = userResponse.data._id; // Assuming the response contains user data with _id
 
-  function increment(id) {
-    const index = cart.findIndex((p) => p._id === id || p.id === id);
-    if (index !== -1 && cart[index].quantity < 10) {
-      dispatch({ type: "Increase", id });
+        await axios.post('http://localhost:4000/api/cart/remove', {
+          userId: userId,
+          productId: product.productId._id
+        }, config);
+
+        // Call the onRemove callback to update the parent component's state
+        onRemove(product.productId._id);
+      }
+    } catch (error) {
+      console.error("Error removing product from cart:", error);
     }
+  };
+
+  const truncateString = (str, num) => {
+    if (!str) {
+      return '';
+    }
+    if (str.length <= num) {
+      return str;
+    }
+    return str.slice(0, num) + '...';
+  };
+
+  const name = product.productId.title;
+  const truncatedName = truncateString(name, 50); // Adjust the number as needed
+
+  function increment() {
+    // Implement increment logic
   }
 
-  function decrement(id) {
-    const index = cart.findIndex((p) => p._id === id || p.id === id);
-    if (index !== -1 && cart[index].quantity > 1) {
-      dispatch({ type: "Decrease", id });
-    }
+  function decrement() {
+    // Implement decrement logic
   }
 
   return (
-    <div className="flex flex-row w-full h-52 md:h-44 border-2 border-[#d0cece] ">
+    <div className="flex flex-row w-full h-52 lg:h-44 border-2 border-[#d0cece] ">
       {/* left side photo */}
-      <div className="md:w-48 w-44 h-full ">
+      <div className="md:w-48 w-44 h-full">
         <img
-          src={product.photos && product.photos.length > 0 ? product.photos[0] : '/path/to/default-image.png'}
+          src={product.productId.images && product.productId.images.length > 0 ? product.productId.images[0] : '/path/to/default-image.png'}
           alt="productImg"
           className="w-full h-full object-contain p-2"
         />
@@ -35,9 +63,9 @@ function CartItems({ product }) {
       {/* right side product details */}
       <div className="flex flex-col gap-2 w-full px-2 py-3 md:p-4">
         <div className="flex flex-row justify-between">
-          <div>{product.name || product.title}</div>
+          <div>{truncatedName}</div>
           <div>
-            <button onClick={() => dispatch({ type: "Remove", id: product_Id })}>
+            <button onClick={deleteProduct}>
               <RxCross2 className="font-semibold" />
             </button>
           </div>
@@ -50,7 +78,7 @@ function CartItems({ product }) {
         <div>
           {/* price */}
           <div>
-            <FormatPrice price={product.price || product.discountFees} />
+            <FormatPrice price={product.productId.discountFees} />
           </div>
 
           {/* increment and decrement */}
@@ -59,7 +87,7 @@ function CartItems({ product }) {
               <button
                 type="button"
                 className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => decrement(product_Id)}
+                onClick={() => decrement()}
                 disabled={product.quantity === 1}
               >
                 <svg
@@ -86,7 +114,7 @@ function CartItems({ product }) {
               <button
                 type="button"
                 className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => increment(product_Id)}
+                onClick={() => increment()}
               >
                 <svg
                   className="flex-shrink-0 size-3.5"

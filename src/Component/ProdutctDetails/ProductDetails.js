@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Product1 from "../Assets/product_image/Product1.png";
 import Checkbox from "@mui/material/Checkbox";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
@@ -8,15 +8,18 @@ import ProductShort from "../Category/MoreToLove/ProductShort";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import FormatPrice from "../Helper/FormatPrice";
-import { CartContext } from '../../Context/ContextProvider';
 
 function ProductDetails() {
-  const { dispatch } = useContext(CartContext);
   const [product, setProduct] = useState({});
   const [productRecommed, setProductRecommed] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
+  const quantity = 1;
+
+
+
+
 
   useEffect(() => {
     const getProduct = async () => {
@@ -46,6 +49,23 @@ function ProductDetails() {
 
     fetchData();
   }, []);
+
+  
+
+  const addToCart = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+      const response = await axios.post(
+        'http://localhost:4000/api/cart/add', // Replace with your backend URL
+        { productId: id, quantity: quantity || 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
+
+
 
   // Function to get a random subset of products
   const getRandomProducts = (items, limit) => {
@@ -103,7 +123,7 @@ function ProductDetails() {
               {/* buy buttons */}
               <div className="mt-12 p-4 flex flex-col md:flex-row items-center gap-4 md:gap-8">
                   <button className="w-80 md:w-52 h-14 rounded-lg bg-[#7D8CFF] text-xl hover:bg-[#4B5DE7] font-semibold" 
-                  onClick={()=>{dispatch({type:"Add",product})}}>
+                  onClick={addToCart}>
                     Add to bag 
                     <ShoppingCartOutlinedIcon />
                   </button>
