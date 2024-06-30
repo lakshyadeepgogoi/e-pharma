@@ -1,47 +1,43 @@
-import React, { useState } from 'react'
-import './OrderSuccessful.css'
-import { useRecoilState } from 'recoil'
-import { orderSuccessfulProvider } from '../Providers/OrderSuccessfulProvider'
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { orderSuccessfulProvider } from '../Providers/OrderSuccessfulProvider';
+import axios from 'axios';
+import FormatPrice from '../Helper/FormatPrice';
 
-const OrderSuccessful = ({ orderid, message, redirecto }) => {
+const OrderSuccessful = ({ orderId, message, redirecto }) => {
+    const [ordersuccesscont, setordersuccesscont] = useRecoilState(orderSuccessfulProvider);
+    const [orderdata, setorderdata] = useState(null);
 
-    const [ordersuccesscont, setordersuccesscont] = useRecoilState(orderSuccessfulProvider)
-    const [orderdata, setorderdata] = useState({
-        OrderNo: orderid,
-        OrderDate: '12/12/2021',
-        OrderStatus: 'Delivered',
-        CustomerName: 'Harshal Jain',
-        CustomerShipToAddress: 'B-101, Shreeji Apartment, Near Shreeji Hospital, Kalyan West, Thane, Maharashtra 421301',
-        CustomerEmail: 'virajj014@gmail.com',
-        OrderItems: [
-            {
-                ProductName: 'Product 1',
-                Price: 100,
-                Quantity: 2,
-            },
-            {
-                ProductName: 'Product 2',
-                Price: 5000,
-                Quantity: 5,
+    useEffect(() => {
+        const fetchOrderData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const config = {
+                        headers: { Authorization: `Bearer ${token}` }
+                    };
+                    const response = await axios.get(`http://localhost:4000/api/orders/${orderId}`, config);
+                    setorderdata(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching order data:', error);
             }
-        ],
-        SubTotal: 25200,
-        Tax: 100,
-        ShippingCharges: 80,
-        Total: 25380,
-        PaymentType: 'Cash on Delivery'
-    })
-    return (
-        <div
-            className='OrdersSuccessful'
-        >
-            <button className='popup__close-btn'
-                onClick={() => {
+        };
 
-                    if(redirecto == 'userorders'){
-                        window.location.href = '/user/yourorders'
+        fetchOrderData();
+    }, [orderId]);
+
+    if (!orderdata) return null;  // Return null if data is not yet fetched
+
+    return (
+        <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'>
+            <button
+                className='absolute top-2 right-2 text-gray-500 w-8 h-8 rounded-full flex justify-center items-center bg-white hover:bg-blue-500 hover:text-white'
+                onClick={() => {
+                    if (redirecto === 'userorders') {
+                        window.location.href = '/user/yourorders';
                     }
-                    setordersuccesscont(false)
+                    setordersuccesscont(false);
                 }}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -49,132 +45,95 @@ const OrderSuccessful = ({ orderid, message, redirecto }) => {
                 </svg>
             </button>
 
-            <div className='confirmationcont'>
-                <div className='c1'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                    </svg>
-                    <h2>{message}</h2>
-                </div>
-
-                <div className='c2'>
-                    <h2>Order Summary</h2>
-                    <div>
-                        <p>Order Number</p>
-                        <p>{orderdata?.OrderNo}</p>
-                    </div>
-                    <div>
-                        <p>Order Date</p>
-                        <p>{
-                            orderdata.OrderDate
-                        }</p>
+            <div className='bg-white w-4/5 h-4/5 rounded-lg overflow-y-auto'>
+                <div className='flex flex-col p-5'>
+                    <div className='flex flex-col items-center mb-5'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-24 h-24 text-blue-500">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                        </svg>
+                        <h2 className='text-center text-xl'>{message}</h2>
                     </div>
 
-                    <div>
-                        <p>Name</p>
-                        <p>{
-                            orderdata.CustomerName
-                        }</p>
+                    <div className='w-full flex flex-wrap justify-between'>
+                        <h2 className='text-lg font-semibold text-blue-500 w-full'>Order Summary</h2>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Order Number : </p>
+                            <p className='text-gray-800 text-base font-semibold'>{orderdata._id.slice(-6)}</p>
+                        </div>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Order Date : </p>
+                            <p className='text-gray-800 text-base font-semibold'>{new Date(orderdata.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Name : </p>
+                            <p className='text-gray-800 text-base font-semibold'>{orderdata.userId ? `${orderdata.userId.firstName} ${orderdata.userId.lastName}` : 'Unknown'}</p>
+                        </div>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Email : </p>
+                            <p className='text-gray-800 text-base font-semibold'>{orderdata.customerEmail}</p>
+                        </div>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Payment Method : </p>
+                            <p className='text-gray-800 text-base font-semibold'>Cash On Delivery</p>
+                        </div>
+                        <div className='flex gap-2 w-full md:w-1/2'>
+                            <p className='text-gray-600 text-base'>Shipping Address : </p>
+                            <p className='text-gray-800 text-base font-semibold'>{orderdata.shippingAddress}</p>
+                        </div>
+                        {/* <div className='flex justify-between w-full md:w-1/2'>
+                            <p className='text-gray-600 text-sm'>Shipping Charges</p>
+                            <p className='text-gray-800 text-sm font-semibold'><FormatPrice price={20} /></p>
+                        </div>
+                        <div className='flex justify-between w-full md:w-1/2'>
+                            <p className='text-gray-600 text-sm'>Tax</p>
+                            <p className='text-gray-800 text-sm font-semibold'>18% approximate</p>
+                        </div>
+                        <div className='flex justify-between w-full md:w-1/2'>
+                            <p className='text-gray-600 text-sm'>Total</p>
+                            <p className='text-gray-800 text-sm font-semibold'><FormatPrice price={orderdata.totalAmount} /></p>
+                        </div> */}
                     </div>
 
-                    <div>
-                        <p>Email</p>
-                        <p>
-                            {
-                                orderdata.CustomerEmail
-                            }
-                        </p>
+                    <div className='mt-5'>
+                        <table className='w-full border-collapse'>
+                            <thead className='bg-blue-500 text-white'>
+                                <tr>
+                                    <th className='p-2 text-left'>Sno.</th>
+                                    <th className='p-2 text-left'>Product</th>
+                                    <th className='p-2 text-left'>Quantity</th>
+                                    <th className='p-2 text-left'>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orderdata.products && orderdata.products.map((item, index) => (
+                                    <tr key={index} className='border-t'>
+                                        <td className='p-2'><p>{index + 1}</p></td>
+                                        <td className='p-2'><p>{item.productId ? `${item.productId.title}` : 'Unknown'}</p></td>
+                                        <td className='p-2'><p>{item.quantity}</p></td>
+                                        <td className='p-2'><p><FormatPrice price={item.price * item.quantity} /></p></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div>
-                        <p>Order Subtotal</p>
-                        <p>$ {orderdata.SubTotal}</p>
-                    </div>
-
-                    <div>
-                        <p>Payment Method</p>
-                        <p>{orderdata.PaymentType}</p>
-                    </div>
-
-                    <div>
-                        <p>Shipping Address</p>
-                        <p>{orderdata.CustomerShipToAddress
-                        }</p>
-                    </div>
-
-                    <div>
-                        <p>Shipping Charges</p>
-                        <p>$ {orderdata.ShippingCharges}</p>
-                    </div>
-
-                    <div>
-                        <p>Tax</p>
-                        <p>$ {orderdata.Tax}</p>
-                    </div>
-
-                    <div>
-                        <p>Total</p>
-                        <p>$ {orderdata.Total}</p>
-                    </div>
-
-                </div>
-
-                <div className='c3'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sno.</th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total Price</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {
-                                orderdata?.OrderItems && orderdata.OrderItems.map((item, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>
-                                                <p>{index + 1}</p>
-                                            </td>
-                                            <td><p>{item.ProductName}</p></td>
-                                            <td><p>${item.Price}</p></td>
-                                            <td><p>{item.Quantity}</p></td>
-                                            <td><p>${item.Price * item.Quantity}</p></td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className='totalcont'>
-                    <div>
-                        <p>Subtotal</p>
-                        <p>$ {orderdata.SubTotal}</p>
-                    </div>
-
-                    <div>
-                        <p>Shipping</p>
-                        <p>$ {orderdata.ShippingCharges}</p>
-                    </div>
-
-                    <div>
-                        <p>Tax</p>
-                        <p>$ {orderdata.Tax}</p>
-                    </div>
-
-                    <div>
-                        <p>Total</p>
-                        <p>$ {orderdata.Total}</p>
+                    <div className='flex flex-col items-center justify-between mt-5 p-5'>
+                        <div className='flex justify-between w-full md:w-1/3'>
+                            <p className='text-gray-600'>Shipping</p>
+                            <p className='text-gray-800'><FormatPrice price={20} /></p>
+                        </div>
+                        <div className='flex justify-between w-full md:w-1/3'>
+                            <p className='text-gray-600'>Including Tax(18%)</p>
+                        </div>
+                        <div className='flex justify-between w-full md:w-1/3'>
+                            <p className='text-gray-600 font-bold'>Total</p>
+                            <p className='text-red-500 font-bold'><FormatPrice price={orderdata.totalAmount} /></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default OrderSuccessful
+export default OrderSuccessful;

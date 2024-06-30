@@ -1,111 +1,84 @@
+import React, { useState, useEffect } from 'react';
+import './YourOrders.css';
+import OrderSuccessful from '../Order/OrderSuccessful';
+import { useRecoilState } from 'recoil';
+import { orderSuccessfulProvider } from '../Providers/OrderSuccessfulProvider';
+import axios from 'axios';
+import FormatPrice from '../Helper/FormatPrice';
 
-import React, { useState } from 'react'
-import './YourOrders.css'
-import OrderSuccessful from '../Order/OrderSuccessful'
-import { useRecoilState } from 'recoil'
-import { orderSuccessfulProvider } from '../Providers/OrderSuccessfulProvider'
 
 const YourOrders = () => {
+    const [orders, setOrders] = useState([]);
+    const [selectedOrderId, setSelectedOrderId] = useState(0);
+    const [orderSuccessCont, setOrderSuccessCont] = useRecoilState(orderSuccessfulProvider);
 
-    const data = [
-        {
-            id: 112345,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 1000
-        },
-        {
-            id: 112346,
-            date: '12/12/2021',
-            status: 'On the way',
-            total: 1600
-        },
-        {
-            id: 112347,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 2000
-        },
-        {
-            id: 112348,
-            date: '12/12/2021',
-            status: 'Cancelled',
-            total: 100
-        },
-        {
-            id: 112345,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 1000
-        },
-        {
-            id: 112346,
-            date: '12/12/2021',
-            status: 'On the way',
-            total: 1600
-        },
-        {
-            id: 112347,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 2000
-        },
-        {
-            id: 112348,
-            date: '12/12/2021',
-            status: 'Cancelled',
-            total: 100
-        }
-    ]
-    const [selectedorderid, setselectedorderid] = useState(0)
-    const [ordersuccesscont, setordersuccesscont] = useRecoilState(orderSuccessfulProvider)
+    useEffect(() => {
+        const fetchOrders = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                };
+                try {
+                    const response = await axios.get('http://localhost:4000/api/orders/userOrders', config);
+                    const data = response.data;
+                    setOrders(data);
+                    console.log(data)
+                } catch (error) {
+                    console.error('Error fetching orders:', error);
+                }
+            }
+        };
+
+        fetchOrders();
+    }, []);
+    console.log(selectedOrderId);
+
     return (
         <div className='yourorders'>
-            <h1 className='mainhead1'>Your Orders</h1>
-            {
-                ordersuccesscont && <OrderSuccessful orderid={selectedorderid} message={`Order ID: ${selectedorderid}`} />
-            }
+            {orderSuccessCont && <OrderSuccessful orderId={selectedOrderId} message={`Order ID: ${selectedOrderId}`} />}
             <table className='yourorderstable'>
                 <thead>
                     <tr>
-                        <th scope='col'>Oder ID</th>
+                        <th scope='col'>Order ID</th>
                         <th scope='col'>Date</th>
                         <th scope='col'>Status</th>
                         <th scope='col'>Total</th>
                         <th scope='col'>Invoice</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {data.map((item, index) => {
-                        return (
-                            <tr key={index}>
-                                <td data-label='OrderID'>{item.id}</td>
-                                <td data-label='OrderDate'>{item.date}</td>
-                                <td data-label='Delivery Status'>
-                                    <div>
-                                        {item.status == 'Delivered' && <span className='greendot'></span>}
-                                        {item.status == 'On the way' && <span className='yellowdot'></span>}
-                                        {item.status == 'Cancelled' && <span className='reddot'></span>}
-                                        {item.status}
-                                    </div>
-                                </td>
-                                <td data-label='Total'>${item.total}</td>
-                                <td data-label='Invoice'>
-                                    <button className='mainbutton1'
-                                        onClick={() => {
-                                            setselectedorderid(item.id)
-                                            setordersuccesscont(true)
-                                        }}
-                                    >View</button>
-                                </td>
-                            </tr>
-                        )
-                    })}
+                    {orders.map((item) => (
+                        <tr key={item._id}>
+                            <td data-label='OrderID'>{item._id.slice(-6)}</td> {/* Show only last 6 digits of the Order ID */}
+                            <td data-label='OrderDate'>{new Date(item.createdAt).toLocaleDateString()}</td>
+                            <td data-label='DeliveryStatus'>
+                                <div>
+                                    {item.status === 'received' && <span className='greendot'></span>}
+                                    {item.status === 'pending' && <span className='yellowdot'></span>}
+                                    {item.status === 'shipped' && <span className='bluedot'></span>}
+                                    {item.status === 'Cancelled' && <span className='reddot'></span>}
+                                    {item.status}
+                                </div>
+                            </td>
+                            <td data-label='Total'> <FormatPrice price={item.totalAmount}/></td>
+                            <td data-label='Invoice'>
+                                <button
+                                    className='mainbutton1'
+                                    onClick={() => {
+                                        setSelectedOrderId(item._id);
+                                        setOrderSuccessCont(true);
+                                    }}
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
-    )
-}
+    );
+};
 
 export default YourOrders;

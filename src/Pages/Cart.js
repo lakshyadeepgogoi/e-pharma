@@ -201,7 +201,7 @@ function Cart({ isLoggedIn }) {
               className='bg-blue-500 h-10 rounded-lg w-full text-white text-lg font-medium'
               onClick={handlePlaceOrder}
             >
-              Place Order
+              Place Order (Cash On Delivery only)
             </button>
           </div>
         </div>

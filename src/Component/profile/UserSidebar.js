@@ -28,7 +28,7 @@ const UserSidebar = ({ activepage }) => {
           </Link>
       }
 
-
+{/* 
       {
         activepage === 'changepassword' ?
           <div className='s2'>
@@ -50,7 +50,7 @@ const UserSidebar = ({ activepage }) => {
               <span>Change Password</span>
             </div>
           </Link>
-      }
+      } */}
 
       {
         activepage === 'yourorders' ?
@@ -74,7 +74,7 @@ const UserSidebar = ({ activepage }) => {
           </Link>
       }
 
-      {
+      {/* {
         activepage === 'address' ?
 
           <div className='s2'>
@@ -96,7 +96,7 @@ const UserSidebar = ({ activepage }) => {
             </div>
 
           </Link>
-      }
+      } */}
       {
         activepage === 'legalnotice' ?
 

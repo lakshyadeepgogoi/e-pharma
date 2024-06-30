@@ -54,9 +54,9 @@ function Dashboard() {
         </div>
         <div className='right'>
           {activepage === 'accountsettings' && <AccountSettings />}
-          {activepage === 'changepassword' && <ChangePassword />}
+          {/* {activepage === 'changepassword' && <ChangePassword />} */}
           {activepage === 'yourorders' && <YourOrders />}
-          {activepage === 'address' && <UserAddress />}
+          {/* {activepage === 'address' && <UserAddress />} */}
           {activepage === 'legalnotice' && <LegalNotice />}
         </div>
       </div>

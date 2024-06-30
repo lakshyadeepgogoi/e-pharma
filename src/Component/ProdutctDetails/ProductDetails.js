@@ -112,7 +112,7 @@ function ProductDetails() {
                 <img
                   src={mainImage}
                   alt="productImage"
-                  className="w-full h-full"
+                  className="w-full h-full shadow-md rounded-lg"
                 />
               </div>
               <div className="flex gap-2 mt-4">
@@ -122,7 +122,7 @@ function ProductDetails() {
                       key={index}
                       src={image}
                       alt={`productImage${index}`}
-                      className="w-20 h-20 cursor-pointer"
+                      className="w-20 h-20 cursor-pointer border-2 border-gray-400 rounded-md"
                       onClick={() => setMainImage(image)}
                     />
                   ))
@@ -130,7 +130,7 @@ function ProductDetails() {
                   <img
                     src={Product1}
                     alt="productImageDefault"
-                    className="w-20 h-20 cursor-pointer"
+                    className="w-20 h-20 cursor-pointer "
                   />
                 )}
               </div>
