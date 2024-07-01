@@ -53,9 +53,9 @@ function Surgical() {
   const displayData = filteredData.length > 0 ? filteredData : data;
 
   return (
-    <div className="md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max my-10 ">
+    <div className="md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max my-16 ">
       <div className="flex flex-row justify-between items-center">
-        <p>category/-----</p>
+        <p>category/Surgical</p>
         <div>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel id="demo-select-small-label">Filter</InputLabel>

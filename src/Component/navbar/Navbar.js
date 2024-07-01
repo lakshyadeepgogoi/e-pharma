@@ -6,11 +6,12 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotifications } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { FiShoppingBag } from "react-icons/fi";
 import { toast } from 'react-hot-toast';
 import Category from "./Category";
 import { CartContext } from "../../Context/ContextProvider";
 import axios from 'axios';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const BASE_URL = 'http://localhost:4000/api';
 
@@ -111,7 +112,7 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
       <div className="w-full sm:flex flex-row justify-between h-24 items-center hidden">
         {/* Logo */}
         <NavLink to="/">
-          <div className="flex flex-row items-center w-60 ml-8 h-full relative">
+          <div className="flex md:flex-row items-center md:w-48 lg:w-52 xl:w-60 ml-8 h-full relative">
             <img src={Logo} alt="logo" className="w-20 h-16"/>
             <span className="text-black font-bold text-xl inline w-full">
               PULSE & PILLS
@@ -121,7 +122,7 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
 
         {/* Search bar */}
         <div className="m-auto h-full items-center flex flex-row gap-2 relative">
-          <div className="sm:w-96 md:w-[500px] flex flex-row h-12 mt-2">
+          <div className="sm:w-72 lg:w-[500px] flex flex-row h-12 mt-2">
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -149,7 +150,7 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           )}
           {/* Upload slip */}
           <div>
-            <button className="bg-[#F2971F] w-28 h-12 rounded-full font-medium mt-2 text-white text-lg" onClick={UploadHandler}>
+            <button className="bg-[#F2971F] sm:w-16 lg:w-28 h-12 rounded-2xl lg:rounded-full font-medium mt-2 text-white lg:text-lg text-lg" onClick={UploadHandler}>
               Upload
             </button>
           </div>
@@ -169,7 +170,7 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
             <div>
               <Link to="/cart" className="relative">
                 {cart.length > 0 && <span className="text-xs absolute z-10 left-3 -top-3 text-black font-bold">{cart.length}</span>}
-                <FaCartShopping className="" />                
+                <FaCartShopping />                
               </Link>
             </div>
             {/* <div>
@@ -181,11 +182,12 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
               <>
-                <button onClick={handleLogout} className="text-xl font-medium">
-                  Log out
+                <button onClick={handleLogout} className="">
+                <LogoutIcon sx={{ fontSize: 30 }}/>
+
                 </button>
                 <Link to="/user/dashboard">
-                  <button className="text-xl font-medium">Dashboard</button>
+                  <button className=""><AccountCircleIcon sx={{ fontSize: 30 }}/></button>
                 </Link>
               </>
             ) : (
@@ -208,8 +210,11 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
 
       {/* Mobile view first section */}
       <div className="w-full sm:hidden relative h-60 bg-gradient-to-r from-blue-700 to-blue-600 mb-16 rounded-b-[50px]">
-        <div className="w-11/12 flex flex-row justify-between m-auto pt-8 items-center text-white">
-          <h1 className="text-2xl font-bold">Pulse & Pills</h1>
+        <div className="w-11/12 flex flex-row justify-between m-auto pt-6 items-center text-white">
+        <div className="flex flex-row gap-2">
+        <img src={Logo} className="w-8 h-8"/>
+        <h1 className="text-xl font-semibold">Pulse & Pills</h1>
+        </div>
           <div className="flex flex-row gap-4 text-xl mr-4">
             <MdOutlineNotifications className="text-2xl" />
           </div>

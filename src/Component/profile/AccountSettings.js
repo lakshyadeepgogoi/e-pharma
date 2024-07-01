@@ -49,7 +49,7 @@ const AccountSettings = () => {
   };
 
   return (
-    <div className='accountsettings'>
+    <div className='accountsettings mb-16'>
       <h1 className='mainhead1'>Personal Information</h1>
       <form className='form' onSubmit={handleSubmit}>
         <div className='form-group'>

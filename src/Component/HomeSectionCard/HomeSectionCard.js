@@ -5,6 +5,7 @@ import axios from 'axios';
 import FormatPrice from '../Helper/FormatPrice';
 import { CartContext } from '../../Context/ContextProvider';
 
+
 function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
   const product = { name, price, photos, tag, id, quantity };
   const { dispatch } = useContext(CartContext);
@@ -40,7 +41,7 @@ function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
   };
 
   return (
-    <div className='sm:h-96 h-max w-[11rem] sm:w-[17rem] flex flex-col rounded-xl border-2 md:my-2 my-1 relative'>
+    <div className='sm:h-96 h-max w-[12rem] sm:w-[18rem] flex flex-col rounded-xl border-2 md:my-2 my-1 relative'>
       <Link to={`/Product-details/${id}`}>
         <div className='w-full object-cover h-40 sm:h-48'>
           {photos && photos.length > 0 ? (
@@ -53,15 +54,18 @@ function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
           <div className='text-[#15A9E3] text-base'>{truncatedTag}</div>
           <h1 className='text-[#184363] font-semibold text-base mb-4'>{truncatedName}</h1>
           <div className='flex flex-row h-10 mb-1 sm:mb-6 justify-between items-center'>
-            <div className='text-[#184363] text-lg'><FormatPrice price={price} /></div>
-            <div className='w-12 h-10 text-center bg-[#FFC000] rounded-full block sm:hidden shadow-md align-middle'>
-              <AddShoppingCartIcon className='mt-1' />
+          <div className='text-[#184363] text-lg'><FormatPrice price={price} /></div>
+
+            <div className='w-10 h-8 text-center bg-[#4feb54] rounded-full block sm:hidden shadow-md align-middle'>
+            <button onClick={addToCart}>
+            <AddShoppingCartIcon className='mt-1' />
+            </button>
             </div>
           </div>
         </div>
       </Link>
       <button 
-        className='text-center align-middle bg-[#EDF4] h-10 w-full mx-auto rounded-full mb-2 hover:bg-[#FFC000] hidden sm:block' 
+        className='text-center align-middle bg-[#EDF4] h-10 w-full mx-auto rounded-full mb-2 hover:bg-[#7474ca] hidden sm:block' 
         onClick={addToCart}
       >
         Add to Cart

@@ -49,9 +49,9 @@ function Lab() {
 
 
   return (
-    <div className='md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max mt-3 mb-10  '>
+    <div className='md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max mt-3 mb-16  '>
     <div className='flex flex-row justify-between items-cente'>
-      <p>category/-----</p>
+      <p>category/Lab</p>
       <div>
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <InputLabel id="demo-select-small-label">Filter</InputLabel>

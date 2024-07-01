@@ -183,12 +183,13 @@ function ProductDetails() {
             </div>
           </div>
           {/* more to love */}
-          <div className="flex flex-col gap-4 my-10 p-4">
+          <div className="flex flex-wrap gap-4 my-10 p-4">
             <p className="text-3xl font-semibold">Product Substitutes</p>
             <div className="flex flex-wrap">
               {randomProducts.map((productRecommed) => (
                 <ProductShort
-                  key={productRecommed.id} // Assuming 'id' is a unique identifier for each product
+                  key={productRecommed._id} // Assuming 'id' is a unique identifier for each product
+                  id={productRecommed._id}
                   name={productRecommed.title}
                   LastPrice={productRecommed.regularFees}
                   photos={productRecommed.images}

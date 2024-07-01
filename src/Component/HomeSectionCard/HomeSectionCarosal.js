@@ -24,8 +24,8 @@ function HomeSectionCarousel() {
   }, []);
 
   const responsive = {
-    0: { items: 1.7 },
-    608: { items: 2 },
+    0: { items: 1 },
+    450: { items: 2 },
     1024: { items: 3 },
     1524: { items: 4 },
   };
@@ -36,7 +36,7 @@ function HomeSectionCarousel() {
         key={product._id} // Add a unique key prop
         id={product._id} // Use _id instead of id
         name={product.title}
-        price={product.discountFees}
+        price={product.offerPrice === 0 ? product.discountFees : product.offerPrice}
         photos={product.images}
         tag={product.tags}
         quantity={product.quantity}

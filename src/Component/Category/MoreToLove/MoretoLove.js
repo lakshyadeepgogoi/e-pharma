@@ -13,7 +13,7 @@ function MoretoLove() {
         const { data: response } = await axios.get('http://localhost:4000/api/products');
         setProducts(response);
       } catch (error) {
-        console.error(error.message);
+        console.error('Error fetching products:', error.message);
       }
       setLoading(false);
     };
@@ -21,29 +21,32 @@ function MoretoLove() {
     fetchData();
   }, []);
 
-  // Function to get a random subset of products
   const getRandomProducts = (items, limit) => {
-    const shuffled = items.sort(() => 0.5 - Math.random());
+    const shuffled = [...items].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, limit);
   };
 
-  const randomProducts = getRandomProducts(products, 8); // Adjust the number 5 to limit the number of products shown
+  const randomProducts = getRandomProducts(products, 8); // Adjust the number to limit the number of products shown
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
+
   return (
     <div className='md:w-full h-max flex flex-wrap w-[90%] mb-6 mx-auto'>
-      {randomProducts.map((product) => (
-        <ProductShort
-          key={product.id} // Assuming 'id' is a unique identifier for each product
-          name={product.title}
-          LastPrice={product.regularFees}
-          photos={product.images}
-          firstPrice={product.discountFees}
-        />
-      ))}
+      {randomProducts.map((product, index) => {
+        return (
+          <ProductShort
+            key={product._id || index} // Ensure the key is correctly referencing _id or fallback to index
+            id={product._id}
+            name={product.title}
+            LastPrice={product.regularFees}
+            photos={product.images}
+            firstPrice={product.discountFees}
+          />
+        );
+      })}
     </div>
   );
 }

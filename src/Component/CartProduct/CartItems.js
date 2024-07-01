@@ -88,7 +88,7 @@ function CartItems({ product, onRemove,onQuantityChange  }) {
     }};
 
   return (
-    <div className="flex flex-row w-full h-52 lg:h-44 border-2 border-[#d0cece] ">
+    <div className="flex flex-row w-full h-52 lg:h-44 border-2 border-[#d0cece] mb-16">
       {/* left side photo */}
       <div className="md:w-48 w-44 h-full">
         <img

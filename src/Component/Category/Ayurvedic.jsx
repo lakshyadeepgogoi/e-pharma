@@ -46,7 +46,7 @@ function Ayurvedic() {
     const displayData = filteredData.length > 0 ? filteredData : data;
 
     return (
-        <div className='md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max mt-3 mb-10'>
+        <div className='md:px-0 m-auto md:w-[90%] w-full flex flex-col p-4 h-max mt-3 mb-16'>
             <div className='flex flex-row justify-between items-center'>
                 <p>Category/Ayurvedic</p>
                 <div>

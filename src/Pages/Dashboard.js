@@ -42,7 +42,7 @@ function Dashboard() {
 
 
   return (
-    <div>
+    <div className='mb-24'>
     <div className="text-black text-2xl font-medium mr-2 text-center">Hey {userName || 'My Dashboard'}!</div>
     <div className="text-black text-lg font-medium mr-2 text-center">Welcome to your dashboard</div>
 
