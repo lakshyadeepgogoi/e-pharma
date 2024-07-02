@@ -7,6 +7,8 @@ import offer2 from "../Component/Assets/Medicine/Offer2.png";
 import lastBanner from "../Component/Assets/Medicine/lastBanner.png";
 import MoretoLove from "../Component/Category/MoreToLove/MoretoLove";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -24,8 +26,6 @@ function Home() {
         // Extract product IDs from offers
         const productIds = offersResponse.flatMap(offer => offer.products.map(product => product._id));
         const uniqueProductIds = [...new Set(productIds)];
-
-        console.log("Fetching products for IDs:", uniqueProductIds); // Debug log for product IDs
 
         // Fetch products based on IDs
         const productRequests = uniqueProductIds.map(id =>
@@ -55,12 +55,29 @@ function Home() {
     fetchOffersAndProducts();
   }, []);
 
+  const addToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+      // Replace with your backend URL
+      const response = await axios.post(
+        'http://localhost:4000/api/cart/add',
+        { productId, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success('Your order has been added to the cart');
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      toast.error('Failed to add item to cart');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="w-full h-full mb-16">
+      <ToastContainer />
       <div>
         <img
           src={landing}
@@ -101,7 +118,8 @@ function Home() {
                     title={product.title}
                     price={product.offerPrice === 0 ? product.discountFees : product.offerPrice}
                     image={product.images}
-                    description = {product.description}
+                    description={product.description}
+                    addToCart={() => addToCart(product._id)} // Pass addToCart function here
                   />
                 ))}
             </div>

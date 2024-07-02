@@ -6,7 +6,6 @@ import { orderSuccessfulProvider } from '../Providers/OrderSuccessfulProvider';
 import axios from 'axios';
 import FormatPrice from '../Helper/FormatPrice';
 
-
 const YourOrders = () => {
     const [orders, setOrders] = useState([]);
     const [selectedOrderId, setSelectedOrderId] = useState(0);
@@ -23,7 +22,7 @@ const YourOrders = () => {
                     const response = await axios.get('http://localhost:4000/api/orders/userOrders', config);
                     const data = response.data;
                     setOrders(data);
-                    console.log(data)
+                    console.log(data);
                 } catch (error) {
                     console.error('Error fetching orders:', error);
                 }
@@ -36,7 +35,7 @@ const YourOrders = () => {
 
     return (
         <div className='yourorders'>
-            {orderSuccessCont && <OrderSuccessful orderId={selectedOrderId} message={`Order ID: ${selectedOrderId}`} />}
+            {orderSuccessCont && <OrderSuccessful orderId={selectedOrderId} />}
             <table className='yourorderstable'>
                 <thead>
                     <tr>
@@ -61,7 +60,7 @@ const YourOrders = () => {
                                     {item.status}
                                 </div>
                             </td>
-                            <td data-label='Total'> <FormatPrice price={item.totalAmount}/></td>
+                            <td data-label='Total'> <FormatPrice price={item.totalAmount} /></td>
                             <td data-label='Invoice'>
                                 <button
                                     className='mainbutton1'

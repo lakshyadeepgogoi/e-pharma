@@ -116,7 +116,7 @@ function CartItems({ product, onRemove,onQuantityChange  }) {
         <div>
           {/* price */}
           <div>
-            <FormatPrice price={product.productId.discountFees} />
+            <FormatPrice price={product.productId.offerPrice === 0 ? product.productId.discountFees : product.productId.offerPrice} />
           </div>
 
           {/* increment and decrement */}

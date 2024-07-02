@@ -67,7 +67,7 @@ function Cart({ isLoggedIn }) {
             items: cartProduct.map(item => ({
               productId: item.productId._id,
               quantity: item.quantity,
-              price: item.productId.discountFees || item.productId.regularFees,
+              price: item.productId.offerPrice === 0 ? item.productId.discountFees : item.productId.offerPrice,
             })),
             totalAmount: calculateTotalPrice(),
             phNumber: '' // Replace with actual phone number from user data
@@ -107,7 +107,7 @@ function Cart({ isLoggedIn }) {
 
   const calculateTotalPrice = () => {
     return cartProduct.reduce((total, item) => {
-      const price = item.productId.discountFees || item.productId.regularFees;
+      const price = item.productId.offerPrice === 0 ? item.productId.discountFees : item.productId.offerPrice;
       return total + (price * item.quantity);
     }, 0) + 20;
   };

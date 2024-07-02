@@ -8,6 +8,8 @@ import ProductShort from "../Category/MoreToLove/ProductShort";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import FormatPrice from "../Helper/FormatPrice";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function ProductDetails() {
   const [product, setProduct] = useState({});
@@ -59,8 +61,10 @@ function ProductDetails() {
         { productId: id, quantity: quantity || 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      toast.success('Your order has been added to the cart');
     } catch (error) {
       console.error('Error adding item to cart:', error);
+      toast.error('Failed to add item to cart');
     }
   };
 
@@ -95,6 +99,7 @@ function ProductDetails() {
 
   return (
     <div className="p-2 md:px-0 mx-auto w-full md:w-[87%] flex flex-col h-max my-10">
+      <ToastContainer />
       {loading ? (
         <div>Loading...</div>
       ) : (
@@ -141,7 +146,7 @@ function ProductDetails() {
               <div className="flex flex-row justify-between border-b-2">
                 <div className="flex flex-row gap-4 items-baseline h-20">
                   <div className="text-xl text-[#090F47] opacity-75 line-through">Rs <FormatPrice price={product.regularFees}/></div>
-                  <div className="text-4xl font-bold text-[#090F47] leading-10">RS.<FormatPrice price={product.discountFees}/></div>
+                  <div className="text-4xl font-bold text-[#090F47] leading-10">RS.<FormatPrice price={product.offerPrice === 0 ? product.discountFees : product.offerPrice}/></div>
                 </div>
                 <div>
                   <Checkbox {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />} className="text-2xl md:mr-6" />

@@ -48,7 +48,12 @@ function LoginForm({ setIsLoggedIn }) {
       toast.success('Logged In');
       navigate('/');
     } catch (error) {
-      toast.error('Failed to verify OTP');
+      if (error.response && error.response.data && error.response.data.redirectToSignUp) {
+        toast.error('You need to sign up first');
+        navigate('/signup'); // Redirect to signup page
+      } else {
+        toast.error('Failed to verify OTP');
+      }
       console.error('Error verifying OTP:', error);
     }
   };

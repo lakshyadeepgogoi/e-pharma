@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 const SignupForm = ({ setIsLoggedIn }) => {
+  console.log("hello")
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
