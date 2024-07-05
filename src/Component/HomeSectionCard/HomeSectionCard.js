@@ -5,8 +5,7 @@ import axios from 'axios';
 import FormatPrice from '../Helper/FormatPrice';
 import { CartContext } from '../../Context/ContextProvider';
 
-
-function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
+function HomeSectionCard({ name, price, photos, tag, id, quantity, offerPrice }) {
   const product = { name, price, photos, tag, id, quantity };
   const { dispatch } = useContext(CartContext);
 
@@ -43,23 +42,27 @@ function HomeSectionCard({ name, price, photos, tag, id, quantity }) {
   return (
     <div className='sm:h-96 h-max w-[12rem] sm:w-[18rem] flex flex-col rounded-xl border-2 md:my-2 my-1 relative'>
       <Link to={`/Product-details/${id}`}>
-        <div className='w-full object-cover h-40 sm:h-48'>
+        <div className='w-full object-cover h-40 sm:h-48 relative'>
           {photos && photos.length > 0 ? (
             <img src={photos[0]} alt='product' className='w-full h-full object-contain' />
           ) : (
             <img src={'/path/to/default-image.png'} alt='default' className='w-full h-full object-cover' />
+          )}
+          {offerPrice !== 0 && (
+            <div className='absolute top-0 left-0 bg-red-500 text-white px-2 py-1'>
+              Special Offer!
+            </div>
           )}
         </div>
         <div className='w-full h-full p-2 sm:p-3 flex flex-col'>
           <div className='text-[#15A9E3] text-base'>{truncatedTag}</div>
           <h1 className='text-[#184363] font-semibold text-base mb-4'>{truncatedName}</h1>
           <div className='flex flex-row h-10 mb-1 sm:mb-6 justify-between items-center'>
-          <div className='text-[#184363] text-lg'><FormatPrice price={price} /></div>
-
+            <div className='text-[#184363] text-lg'><FormatPrice price={price} /></div>
             <div className='w-10 h-8 text-center bg-[#4feb54] rounded-full block sm:hidden shadow-md align-middle'>
-            <button onClick={addToCart}>
-            <AddShoppingCartIcon className='mt-1' />
-            </button>
+              <button onClick={addToCart}>
+                <AddShoppingCartIcon className='mt-1' />
+              </button>
             </div>
           </div>
         </div>

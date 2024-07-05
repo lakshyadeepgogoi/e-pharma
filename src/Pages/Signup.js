@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import signup from "../Component/Assets/authPhoto/signup.png"
 
 const SignupForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -75,8 +76,14 @@ const SignupForm = ({ setIsLoggedIn }) => {
   };
 
   return (
-    <div>
+    <div className='flex flex-col-reverse md:flex-row w-11/12 max-w-[1160px] py-10 mx-auto gap-x-20 justify-center items-center gap-y-12 md:gap-y-0 mb-20'>
+      
       <form onSubmit={submitHandler}>
+      <h1 className='font-semibold text-[1.875rem] leading-[2.375rem] font-Logo_font'>Welcome Pulse & Pilles</h1>
+        <p className='text-[1.125rem] leading-[1.625rem] md:mt-4'>
+          <span className='text-richblack-100'>Chandigarh most trusted partner deliver</span><br />
+          <span className='text-blue-100 italic'>Buy Your medicine at best price</span>
+        </p>
         {/* First Name and Last Name */}
         <div className='flex gap-x-4 mt-5'>
           <label className='w-full'>
@@ -179,6 +186,10 @@ const SignupForm = ({ setIsLoggedIn }) => {
           </>
         )}
       </form>
+
+      <div className=' w-full max-w-[450px] flex justify-center lg:ml-10'>
+        <img className='' src={signup} alt='pattern' width={500} height={450} loading='lazy' />
+      </div>
     </div>
   );
 };

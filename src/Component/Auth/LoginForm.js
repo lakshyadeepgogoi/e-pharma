@@ -58,12 +58,13 @@ function LoginForm({ setIsLoggedIn }) {
     }
   };
 
+  const handleSignUpRedirect = () => {
+    navigate('/signup');
+  };
+
   return (
     <form onSubmit={submitHandler} className='flex flex-col w-full gap-y-4 mt-6'>
       <label className='w-full'>
-        <p className='text-[0.875rem] mb-1 leading-[1.375rem]'>
-          Enter Mobile No.<sup className='text-pink-200'>*</sup>
-        </p>
         <div className='flex items-center'>
           <span className='rounded-md p-3 border-2 bg-gray-100'>+91</span>
           <input
@@ -95,13 +96,22 @@ function LoginForm({ setIsLoggedIn }) {
         </label>
       )}
       {!otpSent ? (
-        <button
-          type='button'
-          onClick={sendOtpHandler}
-          className='bg-green-200 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'
-        >
-          Send OTP
-        </button>
+        <>
+          <button
+            type='button'
+            onClick={sendOtpHandler}
+            className='bg-green-200 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'
+          >
+            Send OTP
+          </button>
+          <button
+            type='button'
+            onClick={handleSignUpRedirect}
+            className='bg-blue-200 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-4'
+          >
+            Sign Up
+          </button>
+        </>
       ) : (
         <button type='submit' className='bg-yellow-50 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-7'>
           Sign In

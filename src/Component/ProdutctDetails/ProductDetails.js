@@ -107,7 +107,7 @@ function ProductDetails() {
           {/* heading */}
           <div className="flex flex-col gap-1 mb-4 p-2">
             <h1 className="text-3xl font-bold">{product.title}</h1>
-            <p className="text-[#686363]">{product.category}</p>
+            {/* <p className="text-[#686363]">{product.category}</p> */}
           </div>
           {/* Product details */}
           <div className="w-full flex flex-col sm:flex-row h-max gap-4 mt-4">
@@ -145,12 +145,19 @@ function ProductDetails() {
               {/* price */}
               <div className="flex flex-row justify-between border-b-2">
                 <div className="flex flex-row gap-4 items-baseline h-20">
-                  <div className="text-xl text-[#090F47] opacity-75 line-through">Rs <FormatPrice price={product.regularFees}/></div>
-                  <div className="text-4xl font-bold text-[#090F47] leading-10">RS.<FormatPrice price={product.offerPrice === 0 ? product.discountFees : product.offerPrice}/></div>
+                  <div className="text-xl text-[#090F47] opacity-75 line-through">
+                    Rs <FormatPrice price={product.regularFees}/>
+                  </div>
+                  <div className="text-4xl font-bold text-[#090F47] leading-10">
+                    RS.<FormatPrice price={product.offerPrice === 0 ? product.discountFees : product.offerPrice}/>
+                  </div>
+                  {product.discountFees > 0 && (
+                    <div className=" bg-green-300 text-black text-sm font-semibold px-2 py-1 rounded">
+                      Offer Price
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <Checkbox {...label} icon={<FavoriteBorder />} checkedIcon={<Favorite />} className="text-2xl md:mr-6" />
-                </div>
+                
               </div>
               {/* package details */}
               <div className="mt-4">
