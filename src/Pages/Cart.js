@@ -24,10 +24,10 @@ function Cart({ isLoggedIn }) {
               headers: { Authorization: `Bearer ${token}` }
             };
 
-            const userResponse = await axios.get('http://localhost:4000/api/users/getUsers', config);
+            const userResponse = await axios.get('https://pulsenpills.onrender.com/api/users/getUsers', config);
             const userId = userResponse.data._id;
 
-            const cartResponse = await axios.get(`http://localhost:4000/api/cart/${userId}`, config);
+            const cartResponse = await axios.get(`https://pulsenpills.onrender.com/api/cart/${userId}`, config);
             setCartProduct(cartResponse.data.items);
           }
         } catch (error) {
@@ -73,15 +73,15 @@ function Cart({ isLoggedIn }) {
             phNumber: '' // Replace with actual phone number from user data
           };
 
-          await axios.post('http://localhost:4000/api/orders/placeOrder', orderDetails, config);
+          await axios.post('https://pulsenpills.onrender.com/api/orders/placeOrder', orderDetails, config);
           alert('Order placed successfully');
           navigate('/');
 
-          const userResponse = await axios.get('http://localhost:4000/api/users/getUsers', config);
+          const userResponse = await axios.get('https://pulsenpills.onrender.com/api/users/getUsers', config);
           const id = userResponse.data._id
           
           // remove all items
-          await axios.delete(`http://localhost:4000/api/cart/clear/${id}`);
+          await axios.delete(`https://pulsenpills.onrender.com/api/cart/clear/${id}`);
           alert('Order placed successfully');
           navigate('/');
 

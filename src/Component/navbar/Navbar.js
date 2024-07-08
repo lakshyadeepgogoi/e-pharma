@@ -13,7 +13,7 @@ import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-const BASE_URL = "http://localhost:4000/api";
+const BASE_URL = "https://pulsenpills.onrender.com/api";
 
 export const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const { cart } = useContext(CartContext);

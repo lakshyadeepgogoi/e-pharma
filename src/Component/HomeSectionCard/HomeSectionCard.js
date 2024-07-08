@@ -27,7 +27,7 @@ function HomeSectionCard({ name, price, photos, tag, id, quantity, offerPrice })
     try {
       const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
       const response = await axios.post(
-        'http://localhost:4000/api/cart/add', // Replace with your backend URL
+        'https://pulsenpills.onrender.com/api/cart/add', // Replace with your backend URL
         { productId: id, quantity: quantity || 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

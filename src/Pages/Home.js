@@ -20,7 +20,7 @@ function Home() {
       setLoading(true);
       try {
         // Fetch offers
-        const { data: offersResponse } = await axios.get("http://localhost:4000/api/offers");
+        const { data: offersResponse } = await axios.get("https://pulsenpills.onrender.com/api/offers");
         setOffers(offersResponse);
 
         // Extract product IDs from offers
@@ -29,7 +29,7 @@ function Home() {
 
         // Fetch products based on IDs
         const productRequests = uniqueProductIds.map(id =>
-          axios.get(`http://localhost:4000/api/products/${id}`)
+          axios.get(`https://pulsenpills.onrender.com/api/products/${id}`)
             .catch(error => {
               console.error(`Error fetching product ${id}:`, error.response ? error.response.data : error.message);
               return { data: null }; // Return a null response to prevent breaking the Promise.all
@@ -60,7 +60,7 @@ function Home() {
       const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
       // Replace with your backend URL
       const response = await axios.post(
-        'http://localhost:4000/api/cart/add',
+        'https://pulsenpills.onrender.com/api/cart/add',
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

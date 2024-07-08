@@ -3,7 +3,7 @@ import './AccountSettings.css';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://pulsenpills.onrender.com/api';
 
 const AccountSettings = () => {
   const [formData, setFormData] = useState({

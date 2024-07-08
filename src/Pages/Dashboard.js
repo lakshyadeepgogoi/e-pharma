@@ -10,7 +10,7 @@ import './Dashboard.css'; // Assuming you have a CSS file for Dashboard styles
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://pulsenpills.onrender.com/api';
 
 
 function Dashboard() {
