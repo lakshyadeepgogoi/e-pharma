@@ -120,7 +120,7 @@ function CartItems({ product, onRemove,onQuantityChange  }) {
           </div>
 
           {/* increment and decrement */}
-          <div className="py-1 px-2 inline-block bg-white border border-gray-200 rounded-lg mt-6">
+          <div className="py-1 px-2 inline-block bg-white border border-gray-200 rounded-lg mt-5">
             <div className="flex items-center gap-x-1.5">
               <button
                 type="button"
